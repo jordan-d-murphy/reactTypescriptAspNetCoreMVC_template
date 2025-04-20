@@ -1,0 +1,75 @@
+##################################
+# macOS
+##################################
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+##################################
+# Node / React / TypeScript / Vite
+##################################
+node_modules/
+dist/
+build/
+.vite/
+*.log
+.env.local
+.env.development
+.env.production
+.env*
+
+##################################
+# TypeScript
+##################################
+*.tsbuildinfo
+
+##################################
+# ASP.NET Core / C#
+##################################
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.pdb
+*.mdb
+*.log
+*.vspscc
+*.vssscc
+
+# Rider / VS Code / Visual Studio
+.idea/
+.vscode/
+.vs/
+
+# Build outputs
+out/
+publish/
+wwwroot/lib/
+
+# EF Core
+Migrations/
+
+##################################
+# Database dumps
+##################################
+*.sql
+*.bak
+
+##################################
+# Secrets (optional)
+##################################
+appsettings.Development.json
+secrets.json
+*.key
+*.pem
+
+# Optional: ignore generated Swagger docs
+swagger/
+
+##################################
+# Git
+##################################
+.git/

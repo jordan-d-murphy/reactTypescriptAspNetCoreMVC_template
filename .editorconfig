@@ -1,0 +1,37 @@
+# top-most EditorConfig file
+root = true
+
+# General settings
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# C# files
+[*.cs]
+indent_size = 4
+dotnet_sort_system_directives_first = true
+dotnet_style_qualification_for_field = false
+dotnet_style_qualification_for_property = false
+dotnet_style_qualification_for_method = false
+dotnet_style_qualification_for_event = false
+csharp_new_line_before_open_brace = all
+csharp_indent_switch_labels = true
+csharp_prefer_braces = true:suggestion
+
+# JSON files
+[*.json]
+indent_size = 2
+
+# TypeScript / JavaScript
+[*.{ts,tsx,js,jsx}]
+indent_size = 2
+quote_type = double
+max_line_length = 120
+
+# Markdown
+[*.md]
+trim_trailing_whitespace = false
