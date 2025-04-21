@@ -7,6 +7,7 @@ using System.Text;
 using Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 
 
 [ApiController]
@@ -28,12 +29,25 @@ public class AuthController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] LoginDto dto)
+    public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        var user = new AppUser { UserName = dto.Username };
+        var user = new AppUser
+        {
+            UserName = dto.Username,
+            Email = dto.Email,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            DisplayName = dto.DisplayName,
+            IsAdmin = false
+        };
+
+        if (string.IsNullOrWhiteSpace(dto.Password))
+            return BadRequest("Password is Required");
+
         var result = await _userManager.CreateAsync(user, dto.Password);
 
-        if (!result.Succeeded) return BadRequest(result.Errors);
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
 
         return Ok();
     }
@@ -49,21 +63,46 @@ public class AuthController : ControllerBase
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? string.Empty),
+            new Claim(ClaimTypes.Name, user.UserName!),
+            new Claim("displayName", user.DisplayName ?? string.Empty),
+            new Claim("isAdmin", user.IsAdmin.ToString())
+        };
+
         var token = new JwtSecurityToken(
-            claims: new[] { new Claim(JwtRegisteredClaimNames.Sub, user.UserName!) },
+            claims: claims,
             expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: creds);
 
         return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
     }
 
-    [HttpGet("me")]
-    public IActionResult Me() =>
-        Ok(User.Identity?.Name); // test protected endpoint
-
     public class LoginDto
     {
+        [Required]
+        [MinLength(6)]
         public string Username { get; set; } = "";
+        [Required]
+        [MinLength(8)]
         public string Password { get; set; } = "";
+    }
+
+    public class RegisterDto
+    {
+        [Required]
+        [MinLength(6)]
+        public string? Username { get; set; } = string.Empty;
+        [Required]
+        [MinLength(8)]
+        public string? Password { get; set; } = string.Empty;
+        [Required]
+        [EmailAddress]
+        public string? Email { get; set; } = string.Empty;
+        [Required]
+        public string? FirstName { get; set; } = string.Empty;
+        public string? LastName { get; set; } = string.Empty;
+        public string? DisplayName { get; set; } = string.Empty;
     }
 }

@@ -1,44 +1,128 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+interface RegisterForm {
+  username: string;
+  password: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  displayName: string;
+}
 
 export default function RegisterPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [form, setForm] = useState<RegisterForm>({
+    username: "",
+    password: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    displayName: "",
+  });
+
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
-    const res = await fetch('/api/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-    if (res.ok) {
-      alert('Account created! Please log in.');
-      navigate('/login');
-    } else {
-      const error = await res.json();
-      alert('Registration failed: ' + JSON.stringify(error));
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (response.ok) {
+        navigate("/login");
+      } else {
+        const data = await response.json();
+        setError(data.title || "Registration failed.");
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
     }
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div style={{ maxWidth: "400px", margin: "auto", padding: "1rem" }}>
       <h2>Register</h2>
-      <input
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        style={{ display: 'block', marginBottom: '1rem', marginLeft: 'auto', marginRight: 'auto' }}
-      />
-      <input
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ display: 'block', marginBottom: '1rem', marginLeft: 'auto', marginRight: 'auto' }}
-      />
-      <button onClick={handleRegister}>Register</button>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="firstName"
+          placeholder="First Name"
+          value={form.firstName}
+          onChange={handleChange}
+          required
+          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+        />
+        <br />
+
+        <input
+          type="text"
+          name="lastName"
+          placeholder="Last Name"
+          value={form.lastName}
+          onChange={handleChange}
+          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+        />
+        <br />
+
+        <input
+          type="text"
+          name="displayName"
+          placeholder="Display Name"
+          value={form.displayName}
+          onChange={handleChange}
+          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+        />
+        <br />
+
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          required
+          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+        />
+        <br />
+
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={form.username}
+          onChange={handleChange}
+          required
+          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+        />
+        <br />
+
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={handleChange}
+          required
+          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+        />
+        <br />
+
+        <button type="submit">Register</button>
+      </form>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }

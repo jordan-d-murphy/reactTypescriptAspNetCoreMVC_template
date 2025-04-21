@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ProtectedRoute } from './routes/ProtectedRoute';
-import UuidPage from './pages/UuidPage';
-import TimestampPage from './pages/TimestampPage';
-import RandomNumberPage from './pages/RandomNumberPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import { Nav } from './components/Nav';
-import NotFoundPage from './pages/NotFoundPage';
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
+import UuidPage from "./pages/UuidPage";
+import TimestampPage from "./pages/TimestampPage";
+import RandomNumberPage from "./pages/RandomNumberPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import { Nav } from "./components/Nav";
+import NotFoundPage from "./pages/NotFoundPage";
+import { ProfilePage } from "./pages/ProfilePage";
 
 type Forecast = {
   date: string;
@@ -24,7 +25,7 @@ function App() {
   const [data, setData] = useState<Forecast[]>([]);
 
   useEffect(() => {
-    fetch('/api/weather')
+    fetch("/api/weather")
       .then((res) => res.json())
       .then(setData)
       .catch(console.error);
@@ -38,22 +39,46 @@ function App() {
           <Route path="/" element={<h1>Welcome to the Tools App</h1>} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/uuid" element={
-            <ProtectedRoute>
-              <UuidPage />
-            </ProtectedRoute> } />          
-          <Route path="/timestamp" element={
-            <ProtectedRoute>
-              <TimestampPage />
-            </ProtectedRoute> } />
-          <Route path="/random" element={
-            <ProtectedRoute>
-              <RandomNumberPage />
-            </ProtectedRoute> } />
-          <Route path="*" element={
-            <ProtectedRoute>
-              <NotFoundPage />
-            </ProtectedRoute> } />
+          <Route
+            path="/uuid"
+            element={
+              <ProtectedRoute>
+                <UuidPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/timestamp"
+            element={
+              <ProtectedRoute>
+                <TimestampPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/random"
+            element={
+              <ProtectedRoute>
+                <RandomNumberPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <ProtectedRoute>
+                <NotFoundPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
       <div>
@@ -66,18 +91,14 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
 
-      <div style={{ padding: '2rem' }}>
+      <div style={{ padding: "2rem" }}>
         <h1>Weather Forecast</h1>
         <table border={1} cellPadding={8}>
           <thead>
@@ -100,10 +121,8 @@ function App() {
           </tbody>
         </table>
       </div>
-
-
     </>
-  )
+  );
 }
 
-export default App
+export default App;

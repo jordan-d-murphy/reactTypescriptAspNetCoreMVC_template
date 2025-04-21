@@ -35,3 +35,4 @@ max_line_length = 120
 # Markdown
 [*.md]
 trim_trailing_whitespace = false
+
