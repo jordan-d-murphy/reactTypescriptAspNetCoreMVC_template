@@ -42,8 +42,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const savedToken = localStorage.getItem("token");
     if (savedToken) {
       const decoded: JwtPayload = jwtDecode(savedToken);
+
+      console.log("[AuthContext] Rehydrated decoded:", decoded);
+
       const username = decoded.sub || decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-      const rawRoles = decoded.role;
+
+      const rawRoles =
+        decoded.role ||
+        decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
+        decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role"];
+
       const roles = Array.isArray(rawRoles) ? rawRoles : rawRoles ? [rawRoles] : [];
 
       setAuthState({
@@ -108,10 +116,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   return <AuthContext.Provider value={authState}>{children}</AuthContext.Provider>;
 };
 
-function parseJwt(token: string): any | null {
-  try {
-    return JSON.parse(atob(token.split(".")[1]));
-  } catch {
-    return null;
-  }
-}
+// function parseJwt(token: string): any | null {
+//   try {
+//     return JSON.parse(atob(token.split(".")[1]));
+//   } catch {
+//     return null;
+//   }
+// }
