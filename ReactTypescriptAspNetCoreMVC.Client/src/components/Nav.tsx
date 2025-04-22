@@ -2,9 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 
 export function Nav() {
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, user, roles } = useAuth();
   const navigate = useNavigate();
-
   const handleLogout = () => {
     logout();
     setTimeout(() => {
@@ -32,6 +31,13 @@ export function Nav() {
           <Link to="/profile" style={{ marginRight: "1rem" }}>
             Profile
           </Link>
+
+          {isAuthenticated && roles.includes("Admin") && (
+            <Link to="/admin" style={{ marginRight: "1rem" }}>
+              Admin
+            </Link>
+          )}
+
           <button onClick={handleLogout} style={{ marginLeft: "1rem" }}>
             Logout ({user})
           </button>

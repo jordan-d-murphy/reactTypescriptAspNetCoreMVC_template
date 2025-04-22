@@ -33,6 +33,16 @@ public class UsersController : ControllerBase
         if (user == null)
             return Unauthorized();
 
+        var userRoles = await _userManager.GetRolesAsync(user);
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.UserName!)
+        };
+
+        claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+        var userClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+
         var profile = new
         {
             user.UserName,
@@ -40,7 +50,9 @@ public class UsersController : ControllerBase
             user.FirstName,
             user.LastName,
             user.DisplayName,
-            user.IsAdmin
+            user.IsAdmin,
+            Claims = userClaims,
+            Roles = userRoles
         };
 
         return Ok(profile);

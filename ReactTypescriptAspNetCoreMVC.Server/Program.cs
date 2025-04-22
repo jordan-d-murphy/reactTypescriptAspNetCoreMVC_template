@@ -7,6 +7,60 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Identity;
 
+// static async Task SeedRolesAndAdminAsync(IServiceProvider services, IConfiguration config)
+// {
+//     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+//     var userManager = services.GetRequiredService<UserManager<AppUser>>();
+
+//     var roles = new[] { "Admin", "FreeUser", "PaidUser", "PremiumUser" };
+
+//     foreach (var role in roles)
+//     {
+//         if (!await roleManager.RoleExistsAsync(role))
+//         {
+//             await roleManager.CreateAsync(new IdentityRole(role));
+//         }
+//     }
+
+//     var adminEmail = config["SeedAdmin:Email"];
+//     var adminPassword = config["SeedAdmin:Password"];
+
+//     if (string.IsNullOrWhiteSpace(adminEmail) || string.IsNullOrWhiteSpace(adminPassword))
+//     {
+//         Console.WriteLine("⚠️  Admin seed user skipped: missing email or password.");
+//         return;
+//     }
+
+//     var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+//     if (adminUser == null)
+//     {
+//         adminUser = new AppUser
+//         {
+//             UserName = adminEmail,
+//             Email = adminEmail,
+//             FirstName = "Admin",
+//             LastName = "User",
+//             DisplayName = "Admin User",
+//             EmailConfirmed = true,
+//             IsAdmin = true
+//         };
+
+//         var result = await userManager.CreateAsync(adminUser, adminPassword);
+//         if (result.Succeeded)
+//         {
+//             await userManager.AddToRoleAsync(adminUser, "Admin");
+//             Console.WriteLine("✅ Admin user seeded.");
+//         }
+//         else
+//         {
+//             Console.WriteLine("❌ Failed to create admin user:");
+//             foreach (var error in result.Errors)
+//                 Console.WriteLine($"  - {error.Description}");
+//         }
+//     }
+// }
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
@@ -29,12 +83,6 @@ builder.Services.AddControllers(options =>
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// builder.Services.AddDbContext<AuthDbContext>(opt =>
-//     opt.UseSqlite("Data Source=auth.db"));
-
-// builder.Services.AddIdentityCore<AppUser>()
-//     .AddEntityFrameworkStores<AuthDbContext>();
 
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -118,9 +166,21 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");
 
+using (var scope = app.Services.CreateScope())
+{
+    var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    await Utils.SeedRolesAndAdminAsync(scope.ServiceProvider, config);
+    Console.WriteLine("Admin user should exist.");
+}
+
+
 app.Run();
+
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
+
+

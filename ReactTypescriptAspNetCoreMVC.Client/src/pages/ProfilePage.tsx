@@ -55,6 +55,22 @@ export function ProfilePage() {
       <p>
         <strong>Admin:</strong> {profile.isAdmin ? "Yes" : "No"}
       </p>
+
+      <h3>User Roles</h3>
+      <ul>
+        {profile.roles?.map((role: string, i: number) => (
+          <li key={i}>{role}</li>
+        ))}
+      </ul>
+
+      <h3>JWT Claims</h3>
+      <ul>
+        {profile.claims?.map((claim: any, i: number) => (
+          <li key={i}>
+            <strong>{claim.type}:</strong> {claim.value}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

@@ -56,20 +56,23 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
-        var user = await _userManager.FindByNameAsync(dto.Username);
+        var user = await _userManager.FindByNameAsync(dto.Username) ?? await _userManager.FindByEmailAsync(dto.Username);
         if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
             return Unauthorized();
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? string.Empty),
             new Claim(ClaimTypes.Name, user.UserName!),
             new Claim("displayName", user.DisplayName ?? string.Empty),
             new Claim("isAdmin", user.IsAdmin.ToString())
         };
+
+        var roles = await _userManager.GetRolesAsync(user);
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var token = new JwtSecurityToken(
             claims: claims,
