@@ -54,7 +54,7 @@ export default function RegisterPage() {
   return (
     <div style={{ maxWidth: "400px", margin: "auto", padding: "1rem" }}>
       <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
+      <form autoComplete="off" onSubmit={handleSubmit}>
         <input
           type="text"
           name="firstName"
@@ -105,6 +105,7 @@ export default function RegisterPage() {
           onChange={handleChange}
           required
           style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+          autoComplete="off"
         />
         <br />
 
@@ -116,6 +117,7 @@ export default function RegisterPage() {
           onChange={handleChange}
           required
           style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+          autoComplete="new-password"
         />
         <br />
 

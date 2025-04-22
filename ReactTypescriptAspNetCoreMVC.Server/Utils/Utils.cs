@@ -8,7 +8,7 @@ public static class Utils
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<AppUser>>();
 
-        var roles = new[] { "Admin", "FreeUser", "PaidUser", "PremiumUser" };
+        var roles = new[] { "Admin", "User", "PaidUser", "PremiumUser" };
 
         foreach (var role in roles)
         {
