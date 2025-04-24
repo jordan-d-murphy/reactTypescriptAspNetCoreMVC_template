@@ -51,6 +51,11 @@ public class AuthController : ControllerBase
 
         await _userManager.AddToRoleAsync(user, "User");
 
+        if (!string.IsNullOrEmpty(dto.ColorRole))
+        {
+            await _userManager.AddToRoleAsync(user, dto.ColorRole);
+        }
+
         return Ok();
     }
 
@@ -109,5 +114,6 @@ public class AuthController : ControllerBase
         public string? FirstName { get; set; } = string.Empty;
         public string? LastName { get; set; } = string.Empty;
         public string? DisplayName { get; set; } = string.Empty;
+        public string? ColorRole { get; set; } = string.Empty;
     }
 }

@@ -5,7 +5,7 @@ public static class Utils
 {
     public static string[] GetRoles()
     {
-        return ["Admin", "User", "PaidUser", "PremiumUser"];
+        return ["Admin", "User", "PaidUser", "PremiumUser", "Red", "Green", "Blue"];
     }
     public static async Task SeedRolesAndAdminAsync(IServiceProvider services, IConfiguration config)
     {

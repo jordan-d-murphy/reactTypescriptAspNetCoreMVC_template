@@ -8,6 +8,7 @@ interface RegisterForm {
   firstName: string;
   lastName: string;
   displayName: string;
+  colorRole: string;
 }
 
 export default function RegisterPage() {
@@ -18,6 +19,7 @@ export default function RegisterPage() {
     firstName: "",
     lastName: "",
     displayName: "",
+    colorRole: "",
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -120,6 +122,43 @@ export default function RegisterPage() {
           autoComplete="new-password"
         />
         <br />
+
+        <fieldset>
+          <legend>Choose a Color Role:</legend>
+          <div>
+            <input
+              type="radio"
+              name="colorRole"
+              id="radio-red"
+              value="Red"
+              defaultChecked={false}
+              onChange={handleChange}
+            />
+            <label htmlFor="radio-red">Red</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="colorRole"
+              id="radio-green"
+              value="Green"
+              defaultChecked={false}
+              onChange={handleChange}
+            />
+            <label htmlFor="radio-green">Green</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="colorRole"
+              id="radio-blue"
+              value="Blue"
+              defaultChecked={false}
+              onChange={handleChange}
+            />
+            <label htmlFor="radio-blue">Blue</label>
+          </div>
+        </fieldset>
 
         <button type="submit">Register</button>
       </form>
