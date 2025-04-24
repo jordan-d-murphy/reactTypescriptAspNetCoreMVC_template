@@ -3,12 +3,16 @@ using Microsoft.AspNetCore.Identity;
 
 public static class Utils
 {
+    public static string[] GetRoles()
+    {
+        return ["Admin", "User", "PaidUser", "PremiumUser"];
+    }
     public static async Task SeedRolesAndAdminAsync(IServiceProvider services, IConfiguration config)
     {
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<AppUser>>();
 
-        var roles = new[] { "Admin", "User", "PaidUser", "PremiumUser" };
+        var roles = GetRoles();
 
         foreach (var role in roles)
         {
