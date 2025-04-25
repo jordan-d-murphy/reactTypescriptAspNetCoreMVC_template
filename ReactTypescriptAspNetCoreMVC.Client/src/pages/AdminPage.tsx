@@ -6,6 +6,7 @@ type AppUser = {
   firstName: string | null;
   lastName: string | null;
   displayName: string | null;
+  userName: string | null;
   fullName: string | null;
   isAdmin: boolean;
 };
@@ -13,7 +14,12 @@ type AppUser = {
 export function AdminPage() {
   const { isAuthenticated, token, roles } = useAuth();
   const [mapUsersToRoles, setMapUsersToRoles] = useState<Record<string, AppUser[]>>({});
+  const [allUsers, setAllUsers] = useState<AppUser[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+
+  const { user: userName } = useAuth();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,9 +41,8 @@ export function AdminPage() {
         return payload;
       })
       .then((data) => {
-        console.log("data");
-        console.log(data);
-        setMapUsersToRoles(data);
+        setMapUsersToRoles(data.mapUsersToRoles);
+        setAllUsers(data.allUsers);
         setLoading(false);
       })
       .catch((err) => {
@@ -46,29 +51,96 @@ export function AdminPage() {
       });
   }, [isAuthenticated, roles, token, navigate]);
 
+  const handleRoleToggle = async (username: string, role: string, isCurrentlyInRole: boolean) => {
+    const method = isCurrentlyInRole ? "DELETE" : "POST";
+    try {
+      const res = await fetch(`/api/admin/roles`, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ username, role }),
+      });
+      if (!res.ok) throw new Error("Failed to update role");
+
+      const updated = await res.json();
+      setMapUsersToRoles(updated.mapUsersToRoles);
+    } catch (err) {
+      console.error("Role update failed", err);
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
-  if (!mapUsersToRoles) return <p>Unable to load Admin Dashboard.</p>;
 
   return (
     <div style={{ padding: "2rem" }}>
       <h2>Admin Dashboard</h2>
 
       <h3>Users in Roles</h3>
+      {selectedRole && (
+        <div
+          style={{
+            position: "absolute",
+            background: "#222",
+            border: "1px solid #555",
+            padding: "1rem",
+            borderRadius: "8px",
+            zIndex: 100,
+            width: "300px",
+          }}
+        >
+          <strong>Edit users for role: {selectedRole}</strong>
+          <ul>
+            {allUsers.map((user) => {
+              const isInRole = mapUsersToRoles[selectedRole]?.some((u) => u.userName === user.userName);
+              // const isSelf = user.userName === "admin@example.com";
+              return (
+                <li key={user.userName}>
+                  <label>
+                    {/* <input
+                      type="checkbox"
+                      checked={isInRole}
+                      // disabled={isSelf && selectedRole === "Admin"}
+                      onChange={() => handleRoleToggle(user.userName!, selectedRole, isInRole)}
+                    /> */}
+                    <input
+                      type="checkbox"
+                      checked={isInRole}
+                      disabled={user.userName === userName && selectedRole === "Admin" && isInRole}
+                      onChange={() => handleRoleToggle(user.userName!, selectedRole, isInRole)}
+                    />
+                    {user.fullName}
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
+          <button onClick={() => setSelectedRole(null)}>Close</button>
+        </div>
+      )}
       <ul style={{ textAlign: "left" }}>
-        {Object.entries(mapUsersToRoles).map(([role, users]) => (
-          <div key={role}>
-            <li className="">
-              <strong>
-                {users.length} {users.length === 1 ? "user" : "users"} with {role} role.
-              </strong>
-            </li>
-            <ul>
-              {users.map((user, i) => (
-                <li key={i}>{user.fullName}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        {mapUsersToRoles && Object.keys(mapUsersToRoles).length > 0 ? (
+          Object.entries(mapUsersToRoles).map(([role, usersInRole]) => (
+            <div key={role}>
+              <li style={{ position: "relative" }}>
+                <strong>
+                  {usersInRole.length} {usersInRole.length === 1 ? "user" : "users"} with {role} role.
+                </strong>
+                <button onClick={() => setSelectedRole(role)} style={{ marginLeft: "1rem" }}>
+                  ⚙️ Edit
+                </button>
+              </li>
+              <ul>
+                {usersInRole.map((user) => (
+                  <li key={user.userName}>{user.fullName}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        ) : (
+          <p>No role data found.</p>
+        )}
       </ul>
     </div>
   );

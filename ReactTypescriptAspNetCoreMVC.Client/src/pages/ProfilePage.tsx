@@ -35,7 +35,7 @@ export function ProfilePage() {
   if (!profile) return <p>Unable to load profile.</p>;
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div style={{ padding: "2rem", textAlign: "left" }}>
       <h2>My Profile</h2>
       <p>
         <strong>Username:</strong> {profile.userName}
