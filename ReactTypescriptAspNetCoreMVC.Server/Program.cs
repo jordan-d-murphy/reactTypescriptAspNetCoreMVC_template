@@ -32,6 +32,7 @@ var app = builder.Build();
 app.UseRouting();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseCors("CorsPolicy");
+app.UseMiddleware<ValidationExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

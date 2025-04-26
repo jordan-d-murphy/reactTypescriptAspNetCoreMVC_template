@@ -1,4 +1,6 @@
 using Auth;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -30,6 +32,10 @@ namespace Extensions
                     .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
+
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<Program>();
 
             return services;
         }
