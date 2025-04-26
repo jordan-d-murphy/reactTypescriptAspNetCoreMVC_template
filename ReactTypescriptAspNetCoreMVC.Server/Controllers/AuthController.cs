@@ -78,7 +78,7 @@ public class AuthController : ControllerBase
 
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(ClaimTypes.Name, user.UserName!),
             new Claim("displayName", user.DisplayName ?? string.Empty),
             new Claim("isAdmin", user.IsAdmin.ToString())

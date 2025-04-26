@@ -1,17 +1,21 @@
 using Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using static AdminController;
 
 public class NotificationService : INotificationService
 {
     private readonly AuthDbContext _context;
     private readonly UserManager<AppUser> _userManager;
+    private readonly IHubContext<NotificationHub> _hub;
 
 
-    public NotificationService(AuthDbContext context, UserManager<AppUser> userManager)
+
+    public NotificationService(AuthDbContext context, UserManager<AppUser> userManager, IHubContext<NotificationHub> hub)
     {
         _context = context;
         _userManager = userManager;
+        _hub = hub;
     }
 
     public async Task SendNotificationAsync(string username, string role, bool added)
@@ -36,6 +40,11 @@ public class NotificationService : INotificationService
             Timestamp = DateTime.UtcNow,
             IsRead = false
         });
+
+
+        await _hub.Clients.User(user.Id).SendAsync("ReceiveNotification", message);
+        // await _hub.Clients.All.SendAsync("ReceiveNotification", new { message = "[All Users] Test notification!" });
+
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"\n\nNotification sent! User: {username} Message: {message}\n\n");

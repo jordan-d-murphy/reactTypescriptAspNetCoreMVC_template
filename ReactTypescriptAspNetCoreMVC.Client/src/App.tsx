@@ -14,6 +14,10 @@ import NotFoundPage from "./pages/NotFoundPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { AdminPage } from "./pages/AdminPage";
 import { NotificationsPage } from "./pages/NotificationsPage";
+import * as signalR from "@microsoft/signalr";
+import { toast, ToastContainer } from "react-toastify";
+import { useAuth } from "./auth/useAuth";
+import "react-toastify/dist/ReactToastify.css";
 
 type Forecast = {
   date: string;
@@ -23,8 +27,44 @@ type Forecast = {
 };
 
 function App() {
+  const { token, isAuthenticated } = useAuth();
   const [count, setCount] = useState(0);
   const [data, setData] = useState<Forecast[]>([]);
+  const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
+
+  useEffect(() => {
+    const connect = async () => {
+      if (!isAuthenticated || !token) {
+        console.log("User not authenticated yet — skipping SignalR connection.");
+        return;
+      }
+
+      const newConnection = new signalR.HubConnectionBuilder()
+        .withUrl("http://localhost:5197/hubs/notifications", {
+          accessTokenFactory: () => token, // <--- JWT here
+        })
+        .withAutomaticReconnect()
+        .build();
+
+      try {
+        await newConnection.start();
+        console.log("SignalR Connected!");
+        setConnection(newConnection);
+
+        newConnection.on("ReceiveNotification", (notification) => {
+          toast.info(notification);
+        });
+      } catch (error) {
+        console.error("SignalR Connection Error: ", error);
+      }
+    };
+
+    connect();
+
+    return () => {
+      connection?.stop();
+    };
+  }, [token, isAuthenticated]);
 
   useEffect(() => {
     fetch("/api/weather")
@@ -131,6 +171,9 @@ function App() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div>
+        <ToastContainer />
       </div>
     </>
   );
