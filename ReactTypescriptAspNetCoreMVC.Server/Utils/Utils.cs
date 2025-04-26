@@ -23,12 +23,15 @@ public static class Utils
             }
         }
 
-        var adminEmail = config["SeedAdmin:Email"];
-        var adminPassword = config["SeedAdmin:Password"];
+        var adminEmail = config["SeedAdmin:Email"] ?? throw new Exception("Missing SeedAdmin__Email");
+        var adminPassword = config["SeedAdmin:Password"] ?? throw new Exception("Missing SeedAdmin__Password");
+
 
         if (string.IsNullOrWhiteSpace(adminEmail) || string.IsNullOrWhiteSpace(adminPassword))
         {
-            Console.WriteLine("⚠️  Admin seed user skipped: missing email or password.");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\n\n⚠️  Admin seed user skipped: missing email or password.\n\n");
+            Console.ResetColor();
             return;
         }
 
@@ -52,13 +55,18 @@ public static class Utils
             {
                 await userManager.AddToRoleAsync(adminUser, "Admin");
                 RoleEvents.RaiseRoleChanged(adminUser.UserName, "Admin", added: true);
-                Console.WriteLine("✅ Admin user seeded.");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("\n\n✅ Admin user seeded.\n\n");
+                Console.ResetColor();
             }
             else
             {
-                Console.WriteLine("❌ Failed to create admin user:");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\n\n❌ Failed to create admin user:");
                 foreach (var error in result.Errors)
                     Console.WriteLine($"  - {error.Description}");
+                Console.WriteLine("\n\n");
+                Console.ResetColor();
             }
         }
     }
