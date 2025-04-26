@@ -6,60 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
-// static async Task SeedRolesAndAdminAsync(IServiceProvider services, IConfiguration config)
-// {
-//     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-//     var userManager = services.GetRequiredService<UserManager<AppUser>>();
-
-//     var roles = new[] { "Admin", "FreeUser", "PaidUser", "PremiumUser" };
-
-//     foreach (var role in roles)
-//     {
-//         if (!await roleManager.RoleExistsAsync(role))
-//         {
-//             await roleManager.CreateAsync(new IdentityRole(role));
-//         }
-//     }
-
-//     var adminEmail = config["SeedAdmin:Email"];
-//     var adminPassword = config["SeedAdmin:Password"];
-
-//     if (string.IsNullOrWhiteSpace(adminEmail) || string.IsNullOrWhiteSpace(adminPassword))
-//     {
-//         Console.WriteLine("⚠️  Admin seed user skipped: missing email or password.");
-//         return;
-//     }
-
-//     var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
-//     if (adminUser == null)
-//     {
-//         adminUser = new AppUser
-//         {
-//             UserName = adminEmail,
-//             Email = adminEmail,
-//             FirstName = "Admin",
-//             LastName = "User",
-//             DisplayName = "Admin User",
-//             EmailConfirmed = true,
-//             IsAdmin = true
-//         };
-
-//         var result = await userManager.CreateAsync(adminUser, adminPassword);
-//         if (result.Succeeded)
-//         {
-//             await userManager.AddToRoleAsync(adminUser, "Admin");
-//             Console.WriteLine("✅ Admin user seeded.");
-//         }
-//         else
-//         {
-//             Console.WriteLine("❌ Failed to create admin user:");
-//             foreach (var error in result.Errors)
-//                 Console.WriteLine($"  - {error.Description}");
-//         }
-//     }
-// }
+using static AdminController;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +40,14 @@ builder.Services.AddIdentity<AppUser, IdentityRole>()
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetRequiredSection("Jwt"));
 
+
+
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<RoleChangedEventHandler>();
+builder.Services.AddSingleton<IRoleEventRelay, RoleEventRelay>();
+
+
+
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "super-secret-key";
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 
@@ -118,6 +73,9 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+
+app.Services.GetRequiredService<IRoleEventRelay>().Register();
 
 
 if (app.Environment.IsDevelopment())
@@ -172,6 +130,14 @@ using (var scope = app.Services.CreateScope())
     await Utils.SeedRolesAndAdminAsync(scope.ServiceProvider, config);
     Console.WriteLine("Admin user should exist.");
 }
+
+// RoleEvents.OnRoleChanged += async (username, role, added) =>
+// {
+//     using var scope = app.Services.CreateScope();
+//     var roleChangedHandler = scope.ServiceProvider.GetRequiredService<RoleChangedEventHandler>();
+//     RoleEvents.OnRoleChanged += roleChangedHandler.HandleRoleChange;
+//     roleChangedHandler.HandleRoleChange(username, role, added);
+// };
 
 
 app.Run();

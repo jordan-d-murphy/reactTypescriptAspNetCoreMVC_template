@@ -1,5 +1,6 @@
 using Auth;
 using Microsoft.AspNetCore.Identity;
+using static AdminController;
 
 public static class Utils
 {
@@ -50,6 +51,7 @@ public static class Utils
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(adminUser, "Admin");
+                RoleEvents.RaiseRoleChanged(adminUser.UserName, "Admin", added: true);
                 Console.WriteLine("✅ Admin user seeded.");
             }
             else

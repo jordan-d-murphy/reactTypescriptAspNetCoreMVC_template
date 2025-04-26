@@ -60,6 +60,7 @@ public class AdminController : ControllerBase
             return BadRequest("Role wasn't passed correctly.");
 
         await _userManager.AddToRoleAsync(user, dto.Role);
+        RoleEvents.RaiseRoleChanged(dto.Username, dto.Role, added: true);
         var roles = Utils.GetRoles();
 
         Dictionary<string, List<AppUser>> mapUsersToRoles = new Dictionary<string, List<AppUser>>();
@@ -101,6 +102,7 @@ public class AdminController : ControllerBase
             return BadRequest("Role wasn't passed correctly.");
 
         await _userManager.RemoveFromRoleAsync(user, dto.Role);
+        RoleEvents.RaiseRoleChanged(dto.Username, dto.Role, added: false);
         var roles = Utils.GetRoles();
 
         Dictionary<string, List<AppUser>> mapUsersToRoles = new Dictionary<string, List<AppUser>>();
@@ -130,5 +132,19 @@ public class AdminController : ControllerBase
         public string? Username { get; set; } = string.Empty;
         [Required]
         public string? Role { get; set; } = string.Empty;
+    }
+
+    public static class RoleEvents
+    {
+        public static event Action<string, string, bool>? OnRoleChanged;
+
+        public static void RaiseRoleChanged(string username, string role, bool added)
+        {
+            Console.WriteLine($"[RoleEvents] RaiseRoleChanged fired for {username} role: {role} added: {added}");
+            if (OnRoleChanged != null)
+            {
+                OnRoleChanged.Invoke(username, role, added);
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ import { Nav } from "./components/Nav";
 import NotFoundPage from "./pages/NotFoundPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { AdminPage } from "./pages/AdminPage";
+import { NotificationsPage } from "./pages/NotificationsPage";
 
 type Forecast = {
   date: string;
@@ -69,6 +70,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <NotificationsPage />
               </ProtectedRoute>
             }
           />

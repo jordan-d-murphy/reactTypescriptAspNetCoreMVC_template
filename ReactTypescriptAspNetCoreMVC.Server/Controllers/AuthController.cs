@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using static AdminController;
 
 
 [ApiController]
@@ -31,6 +32,9 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
+        if (string.IsNullOrWhiteSpace(dto.Username))
+            return BadRequest("Username is Required");
+
         var user = new AppUser
         {
             UserName = dto.Username,
@@ -50,10 +54,12 @@ public class AuthController : ControllerBase
             return BadRequest(result.Errors);
 
         await _userManager.AddToRoleAsync(user, "User");
+        RoleEvents.RaiseRoleChanged(dto.Username, "User", added: true);
 
         if (!string.IsNullOrEmpty(dto.ColorRole))
         {
             await _userManager.AddToRoleAsync(user, dto.ColorRole);
+            RoleEvents.RaiseRoleChanged(dto.Username, dto.ColorRole, added: true);
         }
 
         return Ok();

@@ -17,6 +17,8 @@ namespace Auth
     {
         public AuthDbContext(DbContextOptions<AuthDbContext> options)
             : base(options) { }
+
+        public DbSet<Notification> Notifications { get; set; }
     }
 
     public class JwtSettings
