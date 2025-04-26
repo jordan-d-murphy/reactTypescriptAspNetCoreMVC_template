@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +26,8 @@ var defaultConnection = configuration.GetConnectionString("DefaultConnection") ?
 
 // Services
 builder.Services.AddDbContext<AuthDbContext>(options =>
-    options.UseNpgsql(defaultConnection));
+    options.UseNpgsql(defaultConnection,
+        x => x.MigrationsAssembly("ReactTypescriptAspNetCoreMVC.Server")));
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<AuthDbContext>()

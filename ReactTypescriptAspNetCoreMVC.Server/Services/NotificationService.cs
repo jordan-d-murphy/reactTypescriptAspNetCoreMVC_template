@@ -42,10 +42,7 @@ public class NotificationService : INotificationService
             IsRead = false
         });
 
-
         await _hub.Clients.User(user.Id).SendAsync("ReceiveNotification", message);
-        // await _hub.Clients.All.SendAsync("ReceiveNotification", new { message = "[All Users] Test notification!" });
-
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"\n\nNotification sent! User: {username} Message: {message}\n\n");
@@ -56,7 +53,6 @@ public class NotificationService : INotificationService
 
     public async Task SendNotifyAllAsync(string message)
     {
-
         var users = await _userManager.Users.ToListAsync();
 
         foreach (var user in users)

@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using Microsoft.AspNetCore.SignalR;
 
 public class NameIdentifierUserIdProvider : IUserIdProvider
 {

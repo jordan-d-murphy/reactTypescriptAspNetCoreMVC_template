@@ -21,6 +21,6 @@ public class ToolsController : ControllerBase
     [HttpGet("random")]
     public IActionResult GetRandomNumber()
     {
-        return Ok(new Random().Next(1, 101)); // Random 1-100
+        return Ok(new Random().Next(1, 101));
     }
 }

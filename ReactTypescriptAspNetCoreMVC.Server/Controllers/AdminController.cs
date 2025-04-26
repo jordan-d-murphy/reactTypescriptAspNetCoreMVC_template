@@ -48,7 +48,6 @@ public class AdminController : ControllerBase
     [HttpPost("roles")]
     public async Task<IActionResult> AddUserToRole([FromBody] RoleDto dto)
     {
-        // add user to role (based on dto.Role and dto.Username)
         if (string.IsNullOrWhiteSpace(dto.Username))
             return BadRequest("Username must be passed.");
 
@@ -86,11 +85,10 @@ public class AdminController : ControllerBase
     [HttpDelete("roles")]
     public async Task<IActionResult> RemoveUserFromRole([FromBody] RoleDto dto)
     {
-        // remove user from role
         var username = User.Identity?.Name;
         if (username == dto.Username && dto.Role == "Admin")
             return BadRequest("You cannot remove yourself from Admin Role.");
-        // add user to role (based on dto.Role and dto.Username)
+
         if (string.IsNullOrWhiteSpace(dto.Username))
             return BadRequest("Username must be passed.");
 
