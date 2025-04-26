@@ -1,6 +1,7 @@
 using Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using static AdminController;
 
 public class NotificationService : INotificationService
@@ -48,6 +49,40 @@ public class NotificationService : INotificationService
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"\n\nNotification sent! User: {username} Message: {message}\n\n");
+        Console.ResetColor();
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task SendNotifyAllAsync(string message)
+    {
+
+        var users = await _userManager.Users.ToListAsync();
+
+        foreach (var user in users)
+        {
+            if (user is not null && user.UserName is not null)
+            {
+                _context.Notifications.Add(new Notification
+                {
+                    UserId = user.Id,
+                    User = user,
+                    Username = user.UserName,
+                    Message = message,
+                    Timestamp = DateTime.UtcNow,
+                    IsRead = false
+                });
+            }
+            else
+            {
+                Console.WriteLine($"\n\nUnable to send notification to user: {user} Undeliverable Message: {message}\n\n");
+            }
+        }
+
+        await _hub.Clients.All.SendAsync("ReceiveNotification", message = $"[All Users] {message}");
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"\n\nNotification sent to all users! Message: {message}\n\n");
         Console.ResetColor();
 
         await _context.SaveChangesAsync();

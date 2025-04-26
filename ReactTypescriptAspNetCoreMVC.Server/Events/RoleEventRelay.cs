@@ -17,5 +17,11 @@ public class RoleEventRelay : IRoleEventRelay
             var handler = scope.ServiceProvider.GetRequiredService<RoleChangedEventHandler>();
             await handler.HandleRoleChange(username, role, added);
         };
+        RoleEvents.OnNotifyAll += async (message) =>
+        {
+            using var scope = _provider.CreateScope();
+            var handler = scope.ServiceProvider.GetRequiredService<RoleChangedEventHandler>();
+            await handler.HandleNotifyAll(message);
+        };
     }
 }

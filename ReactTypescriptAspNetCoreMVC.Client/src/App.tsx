@@ -52,6 +52,9 @@ function App() {
         setConnection(newConnection);
 
         newConnection.on("ReceiveNotification", (notification) => {
+          console.log("newConnection.on('ReceiveNotification'");
+          console.log("notification:");
+          console.log(notification);
           toast.info(notification);
         });
       } catch (error) {

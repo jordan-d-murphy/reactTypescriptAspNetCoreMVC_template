@@ -13,4 +13,9 @@ public class RoleChangedEventHandler
     {
         await _notificationService.SendNotificationAsync(username, role, added);
     }
+
+    public async Task HandleNotifyAll(string message)
+    {
+        await _notificationService.SendNotifyAllAsync(message);
+    }
 }

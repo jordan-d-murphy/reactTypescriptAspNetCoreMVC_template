@@ -125,6 +125,18 @@ public class AdminController : ControllerBase
         });
     }
 
+    [HttpPost("notifyall")]
+    public async Task<IActionResult> NotifyAllUsers([FromBody] SendNotificationDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Message))
+        {
+            return BadRequest(new { message = "Server says: The message field is required." });
+        }
+
+        RoleEvents.RaiseNotifyAll(dto.Message);
+        return Ok(new { success = true, message = "Notify all users success" });
+    }
+
 
     public class RoleDto
     {
@@ -137,6 +149,7 @@ public class AdminController : ControllerBase
     public static class RoleEvents
     {
         public static event Action<string, string, bool>? OnRoleChanged;
+        public static event Action<string>? OnNotifyAll;
 
         public static void RaiseRoleChanged(string username, string role, bool added)
         {
@@ -144,6 +157,15 @@ public class AdminController : ControllerBase
             if (OnRoleChanged != null)
             {
                 OnRoleChanged.Invoke(username, role, added);
+            }
+        }
+
+        public static void RaiseNotifyAll(string message)
+        {
+            Console.WriteLine($"[RoleEvents] RaiseNotifyAll fired for all users");
+            if (OnNotifyAll != null)
+            {
+                OnNotifyAll.Invoke(message);
             }
         }
     }

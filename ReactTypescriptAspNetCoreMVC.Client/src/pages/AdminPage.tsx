@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 
+interface NotifyAllForm {
+  message: string;
+}
+
 type AppUser = {
   firstName: string | null;
   lastName: string | null;
@@ -17,8 +21,11 @@ export function AdminPage() {
   const [allUsers, setAllUsers] = useState<AppUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
-
   const { user: userName } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [form, setForm] = useState<NotifyAllForm>({
+    message: "",
+  });
 
   const navigate = useNavigate();
 
@@ -71,11 +78,57 @@ export function AdminPage() {
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleNotifyAll = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    const method = "POST";
+    try {
+      const res = await fetch(`/api/admin/notifyall`, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error("Failed to notify all");
+
+      const success = await res.json();
+      setForm({ message: "" });
+      console.log(success);
+      return success;
+    } catch (err) {
+      console.error("Notify all failed", err);
+      setError("Something went wrong trying to notify all users. Please try again.");
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
 
   return (
     <div style={{ padding: "2rem" }}>
       <h2>Admin Dashboard</h2>
+
+      <p>Send a test notification to all users.</p>
+      <form autoComplete="off" onSubmit={handleNotifyAll}>
+        <input
+          type="text"
+          name="message"
+          placeholder="Message"
+          value={form.message}
+          onChange={handleChange}
+          required
+          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+        />
+        <br />
+
+        <button type="submit">Notify All</button>
+      </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
       <h3>Users in Roles</h3>
       {selectedRole && (
