@@ -130,11 +130,3 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return <AuthContext.Provider value={authState}>{children}</AuthContext.Provider>;
 };
-
-// function parseJwt(token: string): any | null {
-//   try {
-//     return JSON.parse(atob(token.split(".")[1]));
-//   } catch {
-//     return null;
-//   }
-// }

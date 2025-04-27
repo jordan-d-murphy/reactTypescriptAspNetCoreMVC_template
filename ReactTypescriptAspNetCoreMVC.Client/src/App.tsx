@@ -1,29 +1,34 @@
 import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
+import { useAuth } from "./auth/useAuth";
+import { Nav } from "./components/Nav";
+import NavigateSetter from "./NavigateSetter";
+
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ProtectedRoute } from "./routes/ProtectedRoute";
+
 import UuidPage from "./pages/UuidPage";
 import TimestampPage from "./pages/TimestampPage";
 import RandomNumberPage from "./pages/RandomNumberPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import { Nav } from "./components/Nav";
-import NotFoundPage from "./pages/NotFoundPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { AdminPage } from "./pages/AdminPage";
 import { NotificationsPage } from "./pages/NotificationsPage";
+import NotFoundPage from "./pages/NotFoundPage";
+
 import * as signalR from "@microsoft/signalr";
 import { toast, ToastContainer } from "react-toastify";
-import { useAuth } from "./auth/useAuth";
 import "react-toastify/dist/ReactToastify.css";
-import NavigateSetter from "./NavigateSetter";
+
+import AxiosErrorListener from "./api/AxiosErrorListener";
 
 function App() {
   const { token, isAuthenticated } = useAuth();
-  const [count, setCount] = useState(0);
   const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     const connect = async () => {
@@ -33,7 +38,6 @@ function App() {
       }
 
       const newConnection = new signalR.HubConnectionBuilder()
-        // should probably load this from config ↓
         .withUrl("http://localhost:5197/hubs/notifications", {
           accessTokenFactory: () => token,
         })
@@ -42,7 +46,6 @@ function App() {
 
       try {
         await newConnection.start();
-        console.log("SignalR Connection State after start:", newConnection.state);
         console.log("SignalR Connected!");
         setConnection(newConnection);
 
@@ -71,11 +74,13 @@ function App() {
     <>
       <Router>
         <NavigateSetter />
+        <AxiosErrorListener />
         <Nav />
         <Routes>
           <Route path="/" element={<h1>Welcome to the Tools App</h1>} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+
           <Route
             path="/uuid"
             element={
@@ -124,9 +129,11 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
+
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -144,9 +151,7 @@ function App() {
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
 
-      <div>
-        <ToastContainer />
-      </div>
+      <ToastContainer />
     </>
   );
 }
