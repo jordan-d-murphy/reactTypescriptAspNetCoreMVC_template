@@ -23,7 +23,10 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName!),
+                new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
                 new Claim("displayName", user.DisplayName ?? string.Empty),
+                new Claim("given_name", user.FirstName ?? string.Empty),
+                new Claim("family_name", user.LastName ?? string.Empty),
                 new Claim("isAdmin", user.IsAdmin.ToString())
             };
 

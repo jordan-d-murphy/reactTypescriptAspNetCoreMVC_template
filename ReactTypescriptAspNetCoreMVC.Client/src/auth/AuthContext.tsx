@@ -1,9 +1,10 @@
 import { jwtDecode } from "jwt-decode";
 import { createContext, useState, useEffect, ReactNode } from "react";
+import { UserType } from "../types/UserType";
 
 type AuthContextType = {
   token: string | null;
-  user: string | null; // can use a more complex type if needed
+  user: UserType | null;
   login: (token: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
@@ -45,7 +46,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       console.log("[AuthContext] Rehydrated decoded:", decoded);
 
-      const username = decoded.sub || decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+      const user: UserType = {
+        id: decoded.sub as string,
+        username: (decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] as string) || "",
+        email: (decoded["email"] as string) || "",
+        displayName: (decoded["displayName"] as string) || "",
+        firstName: (decoded["given_name"] as string) || "",
+        lastName: (decoded["family_name"] as string) || "",
+      };
 
       const rawRoles =
         decoded.role ||
@@ -56,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       setAuthState({
         isAuthenticated: true,
-        user: username ?? null,
+        user: user ?? null,
         token: savedToken,
         roles,
         login,
@@ -80,7 +88,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("token", token);
     const decoded: JwtPayload = jwtDecode(token);
 
-    const username = decoded.sub || decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+    const user: UserType = {
+      id: decoded.sub as string,
+      username: (decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] as string) || "",
+      email: (decoded["email"] as string) || "",
+      displayName: (decoded["displayName"] as string) || "",
+      firstName: (decoded["given_name"] as string) || "",
+      lastName: (decoded["family_name"] as string) || "",
+    };
 
     const rawRoles =
       decoded.role ||
@@ -91,7 +106,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     setAuthState({
       isAuthenticated: true,
-      user: username ?? null,
+      user: user ?? null,
       token,
       roles,
       login,

@@ -42,7 +42,7 @@ export function Nav() {
           )}
 
           <button onClick={handleLogout} style={{ marginLeft: "1rem" }}>
-            Logout ({user})
+            Logout ({user?.displayName || user?.username || "User"})
           </button>
         </>
       ) : (
