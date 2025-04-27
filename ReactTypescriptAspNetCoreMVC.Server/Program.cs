@@ -27,7 +27,6 @@ builder.Services.AddSwaggerDocumentation();
 builder.Services.AddCorsPolicy();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddSingleton<IRoleEventRelay, RoleEventRelay>();
 
 // Build app
 var app = builder.Build();
@@ -50,11 +49,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
-
-
-
 app.MapHub<NotificationHub>(NotificationHub.HubUrl);
+app.Services.GetRequiredService<IRoleEventRelay>().Register();
 
 using (var scope = app.Services.CreateScope())
 {

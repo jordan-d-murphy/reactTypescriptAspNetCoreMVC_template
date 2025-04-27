@@ -35,16 +35,8 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      const response = await api.post("/auth/login", { form });
-      // const response = await fetch("/api/auth/register", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(form),
-      // });
-
-      if (response.data) {
+      const response = await api.post("/auth/register", form);
+      if (response.data.success) {
         navigate("/login");
       } else {
         setError("Registration failed.");

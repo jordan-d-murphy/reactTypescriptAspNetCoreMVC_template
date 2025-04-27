@@ -29,7 +29,6 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Setup
             var adminEmail = config["SeedAdmin:Email"] ?? throw new Exception("Missing SeedAdmin__Email");
             var adminPassword = config["SeedAdmin:Password"] ?? throw new Exception("Missing SeedAdmin__Password");
 
-
             if (string.IsNullOrWhiteSpace(adminEmail) || string.IsNullOrWhiteSpace(adminPassword))
             {
                 Console.ForegroundColor = ConsoleColor.Red;

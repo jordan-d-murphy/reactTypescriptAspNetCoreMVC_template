@@ -6,12 +6,6 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Extensions
     {
         public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
         {
-            // services.AddSwaggerGen(c =>
-            // {
-            //     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-            // });
-
-            // return services;
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {

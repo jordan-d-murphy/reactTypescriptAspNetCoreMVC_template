@@ -1,11 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using ReactTypescriptAspNetCoreMVC.Server.Entities;
-using ReactTypescriptAspNetCoreMVC.Server.Settings;
 using ReactTypescriptAspNetCoreMVC.Server.Interfaces;
+using ReactTypescriptAspNetCoreMVC.Server.Settings;
 
 namespace ReactTypescriptAspNetCoreMVC.Server.Services
 {

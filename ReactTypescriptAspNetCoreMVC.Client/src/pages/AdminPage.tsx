@@ -48,12 +48,6 @@ export function AdminPage() {
         setMapUsersToRoles(data.mapUsersToRoles);
         setAllUsers(data.allUsers);
         setLoading(false);
-
-        // if (!res.ok) throw new Error("Access denied");
-        // var payload = res.json();
-        // console.log("res.json() payload");
-        // console.log(payload);
-        // return payload;
         return data;
       })
       .then((data) => {
@@ -81,43 +75,6 @@ export function AdminPage() {
     }
   };
 
-  // const handleRoleToggle = async (username: string, role: string, isCurrentlyInRole: boolean) => {
-  //   const method = isCurrentlyInRole ? "delete" : "post";
-
-  //   try {
-  //     const res = await api.request({
-  //       url: "/admin/roles",
-  //       method,
-  //       data: { username, role },
-  //     });
-
-  //     const updated = res.data;
-  //     setMapUsersToRoles(updated.mapUsersToRoles);
-  //   } catch (err) {
-  //     console.error("Role update failed", err);
-  //   }
-  // };
-
-  // const handleRoleToggle = async (username: string, role: string, isCurrentlyInRole: boolean) => {
-  //   const method = isCurrentlyInRole ? "DELETE" : "POST";
-  //   try {
-  //     const res = await fetch(`/api/admin/roles`, {
-  //       method,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify({ username, role }),
-  //     });
-  //     if (!res.ok) throw new Error("Failed to update role");
-
-  //     const updated = await res.json();
-  //     setMapUsersToRoles(updated.mapUsersToRoles);
-  //   } catch (err) {
-  //     console.error("Role update failed", err);
-  //   }
-  // };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -125,42 +82,15 @@ export function AdminPage() {
   const handleNotifyAll = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    // const method = "POST";
     try {
-      const res = await api.post("/admin/notifyall");
-      setForm({ message: "" });
+      const res = await api.post("/admin/notifyall", { message: form.message });
       console.log(res.data);
-      return res.data;
+      setForm({ message: "" });
     } catch (err) {
       console.error("Notify all failed", err);
       setError("Something went wrong trying to notify all users. Please try again.");
     }
   };
-
-  // const handleNotifyAll = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setError(null);
-  //   const method = "POST";
-  //   try {
-  //     const res = await fetch(`/api/admin/notifyall`, {
-  //       method,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify(form),
-  //     });
-  //     if (!res.ok) throw new Error("Failed to notify all");
-
-  //     const success = await res.json();
-  //     setForm({ message: "" });
-  //     console.log(success);
-  //     return success;
-  //   } catch (err) {
-  //     console.error("Notify all failed", err);
-  //     setError("Something went wrong trying to notify all users. Please try again.");
-  //   }
-  // };
 
   if (loading) return <p>Loading...</p>;
 
@@ -202,16 +132,9 @@ export function AdminPage() {
           <ul>
             {allUsers.map((user) => {
               const isInRole = mapUsersToRoles[selectedRole]?.some((u) => u.userName === user.userName);
-              // const isSelf = user.userName === "admin@example.com";
               return (
                 <li key={user.userName}>
                   <label>
-                    {/* <input
-                      type="checkbox"
-                      checked={isInRole}
-                      // disabled={isSelf && selectedRole === "Admin"}
-                      onChange={() => handleRoleToggle(user.userName!, selectedRole, isInRole)}
-                    /> */}
                     <input
                       type="checkbox"
                       checked={isInRole}

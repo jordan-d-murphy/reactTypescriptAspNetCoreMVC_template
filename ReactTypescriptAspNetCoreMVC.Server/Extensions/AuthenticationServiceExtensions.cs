@@ -1,6 +1,7 @@
+using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace ReactTypescriptAspNetCoreMVC.Server.Extensions
 {
@@ -8,68 +9,53 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Extensions
     {
         public static IServiceCollection AddAuthenticationServices(this IServiceCollection services, IConfiguration config)
         {
-            // var jwtKey = config["Jwt:Key"] ?? throw new Exception("Missing Jwt:Key");
             var jwtKey = config["Jwt:Key"] ?? Environment.GetEnvironmentVariable("Jwt__Key") ?? throw new Exception("Missing Jwt Key");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = key,
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ClockSkew = TimeSpan.Zero
-        };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnChallenge = context =>
+            services.AddAuthentication(options =>
             {
-                context.HandleResponse(); // very important
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                context.Response.ContentType = "application/json";
-                var result = System.Text.Json.JsonSerializer.Serialize(new { message = "Unauthorized" });
-                return context.Response.WriteAsync(result);
-            },
-            OnForbidden = context =>
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
             {
-                context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                return Task.CompletedTask;
-            }
-        };
-    });
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
 
-            // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //     .AddJwtBearer(options =>
-            //     {
-            //         options.RequireHttpsMetadata = false;
-            //         options.SaveToken = true;
-            //         options.TokenValidationParameters = new TokenValidationParameters
-            //         {
-            //             ValidateIssuerSigningKey = true,
-            //             IssuerSigningKey = key,
-            //             ValidateIssuer = false,
-            //             ValidateAudience = false,
-            //             ClockSkew = TimeSpan.Zero
-            //         };
-
-            //         options.Events = new JwtBearerEvents
-            //         {
-            //             OnChallenge = context =>
-            //             {
-            //                 context.HandleResponse();
-            //                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            //                 context.Response.ContentType = "application/json";
-            //                 var result = System.Text.Json.JsonSerializer.Serialize(new { message = "Unauthorized" });
-            //                 return context.Response.WriteAsync(result);
-            //             }
-            //         };
-            //     });
+                        // If the request is for SignalR hub
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            path.StartsWithSegments("/hubs/notifications"))
+                        {
+                            // Read token from query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.ContentType = "application/json";
+                        var result = JsonSerializer.Serialize(new { message = "Unauthorized" });
+                        return context.Response.WriteAsync(result);
+                    }
+                };
+            });
 
             return services;
         }

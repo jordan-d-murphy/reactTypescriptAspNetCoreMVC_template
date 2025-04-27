@@ -18,28 +18,12 @@ import * as signalR from "@microsoft/signalr";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "./auth/useAuth";
 import "react-toastify/dist/ReactToastify.css";
-import { setNavigate } from "./router";
-import { useNavigate } from "react-router-dom";
 import NavigateSetter from "./NavigateSetter";
-
-type Forecast = {
-  date: string;
-  temperatureC: number;
-  temperatureF: number;
-  summary: string;
-};
 
 function App() {
   const { token, isAuthenticated } = useAuth();
   const [count, setCount] = useState(0);
-  const [data, setData] = useState<Forecast[]>([]);
   const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
-
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   setNavigate(navigate);
-  // }, [navigate]);
 
   useEffect(() => {
     const connect = async () => {
@@ -49,22 +33,27 @@ function App() {
       }
 
       const newConnection = new signalR.HubConnectionBuilder()
+        // should probably load this from config ↓
         .withUrl("http://localhost:5197/hubs/notifications", {
-          accessTokenFactory: () => token, // <--- JWT here
+          accessTokenFactory: () => token,
         })
         .withAutomaticReconnect()
         .build();
 
       try {
         await newConnection.start();
+        console.log("SignalR Connection State after start:", newConnection.state);
         console.log("SignalR Connected!");
         setConnection(newConnection);
 
         newConnection.on("ReceiveNotification", (notification) => {
-          console.log("newConnection.on('ReceiveNotification'");
-          console.log("notification:");
-          console.log(notification);
-          toast.info(notification);
+          if (typeof notification === "string") {
+            toast.info(notification);
+          } else if (notification?.message) {
+            toast.info(notification.message);
+          } else {
+            console.warn("Received unknown notification payload:", notification);
+          }
         });
       } catch (error) {
         console.error("SignalR Connection Error: ", error);
@@ -77,13 +66,6 @@ function App() {
       connection?.stop();
     };
   }, [token, isAuthenticated]);
-
-  // useEffect(() => {
-  //   fetch("/api/weather")
-  //     .then((res) => res.json())
-  //     .then(setData)
-  //     .catch(console.error);
-  // }, []);
 
   return (
     <>
@@ -162,29 +144,6 @@ function App() {
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
 
-      {/* <div style={{ padding: "2rem" }}>
-        <h1>Weather Forecast</h1>
-        <table border={1} cellPadding={8}>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Temp (°C)</th>
-              <th>Temp (°F)</th>
-              <th>Summary</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((f, i) => (
-              <tr key={i}>
-                <td>{f.date}</td>
-                <td>{f.temperatureC}</td>
-                <td>{f.temperatureF}</td>
-                <td>{f.summary}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div> */}
       <div>
         <ToastContainer />
       </div>

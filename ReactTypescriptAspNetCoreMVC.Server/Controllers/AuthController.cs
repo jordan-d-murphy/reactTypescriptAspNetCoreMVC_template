@@ -1,16 +1,10 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using ReactTypescriptAspNetCoreMVC.Server.DTOs.Auth;
 using ReactTypescriptAspNetCoreMVC.Server.Entities;
 using ReactTypescriptAspNetCoreMVC.Server.Events;
 using ReactTypescriptAspNetCoreMVC.Server.Interfaces;
-using ReactTypescriptAspNetCoreMVC.Server.Settings;
 
 namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
 {
@@ -18,16 +12,12 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly JwtSettings _jwtSettings;
         private readonly UserManager<AppUser> _userManager;
-        private readonly IConfiguration _config;
         private readonly ITokenService _tokenService;
 
-        public AuthController(UserManager<AppUser> userManager, IConfiguration config, IOptions<JwtSettings> options, ITokenService tokenService)
+        public AuthController(UserManager<AppUser> userManager, ITokenService tokenService)
         {
             _userManager = userManager;
-            _config = config;
-            _jwtSettings = options.Value;
             _tokenService = tokenService;
         }
 
@@ -65,7 +55,7 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
                 RoleEvents.RaiseRoleChanged(dto.Username, dto.ColorRole, added: true);
             }
 
-            return Ok();
+            return Ok(new { success = true, message = "Registered successfully." });
         }
 
         [HttpPost("login")]
@@ -81,46 +71,5 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
 
             return Ok(new { token });
         }
-
-        // [AllowAnonymous]
-        // [HttpPost("login")]
-        // public async Task<IActionResult> Login([FromBody] LoginDto dto)
-        // {
-        //     var user = await _userManager.FindByNameAsync(dto.Username) ?? await _userManager.FindByEmailAsync(dto.Username);
-        //     if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
-        //         return Unauthorized();
-
-        //     Console.ForegroundColor = ConsoleColor.Green;
-        //     Console.WriteLine($"\n\n_jwtSettings.Key:\n\n{_jwtSettings.Key}\n\n");
-        //     Console.ResetColor();
-
-        //     // var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
-        //     var claims = new List<Claim>
-        //     {
-        //         new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-        //         new Claim(ClaimTypes.Name, user.UserName!),
-        //         new Claim("displayName", user.DisplayName ?? string.Empty),
-        //         new Claim("isAdmin", user.IsAdmin.ToString())
-        //     };
-
-        //     var roles = await _userManager.GetRolesAsync(user);
-        //     claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-        //     var token = _tokenService.CreateToken(user, roles);
-        //     // var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-
-
-        //     // var token = new JwtSecurityToken(
-        //     //     claims: claims,
-        //     //     expires: DateTime.UtcNow.AddHours(1),
-        //     //     signingCredentials: creds);
-
-        //     // return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
-
-        //     // var roles = await _userManager.GetRolesAsync(user);
-
-
-        //     return Ok(new { token });
-        // }
     }
 }

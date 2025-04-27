@@ -11,7 +11,7 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Extensions
                     policy.AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials()
-                          .WithOrigins("http://localhost:5173");
+                          .WithOrigins("http://localhost:5173"); // react client, should probably load from config...
                 });
             });
 
