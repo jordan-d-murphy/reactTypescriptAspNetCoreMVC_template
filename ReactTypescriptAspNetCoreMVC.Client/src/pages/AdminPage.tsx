@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 import api from "../api/axiosInstance";
+import Modal from "../components/Modal";
 
 interface NotifyAllForm {
   message: string;
@@ -24,6 +25,7 @@ export function AdminPage() {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const { user: userName } = useAuth();
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState<NotifyAllForm>({
     message: "",
   });
@@ -117,38 +119,63 @@ export function AdminPage() {
 
       <h3>Users in Roles</h3>
       {selectedRole && (
-        <div
-          style={{
-            position: "absolute",
-            background: "#222",
-            border: "1px solid #555",
-            padding: "1rem",
-            borderRadius: "8px",
-            zIndex: 100,
-            width: "300px",
-          }}
-        >
-          <strong>Edit users for role: {selectedRole}</strong>
-          <ul>
-            {allUsers.map((user) => {
-              const isInRole = mapUsersToRoles[selectedRole]?.some((u) => u.userName === user.userName);
-              return (
-                <li key={user.userName}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={isInRole}
-                      disabled={user.userName === userName && selectedRole === "Admin" && isInRole}
-                      onChange={() => handleRoleToggle(user.userName!, selectedRole, isInRole)}
-                    />
-                    {user.fullName}
-                  </label>
-                </li>
-              );
-            })}
-          </ul>
-          <button onClick={() => setSelectedRole(null)}>Close</button>
-        </div>
+        <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+          <h2>Edit User Roles</h2>
+          <form>
+            <strong>Edit users for role: {selectedRole}</strong>
+            <ul>
+              {allUsers.map((user) => {
+                const isInRole = mapUsersToRoles[selectedRole]?.some((u) => u.userName === user.userName);
+                return (
+                  <li key={user.userName}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={isInRole}
+                        disabled={user.userName === userName && selectedRole === "Admin" && isInRole}
+                        onChange={() => handleRoleToggle(user.userName!, selectedRole, isInRole)}
+                      />
+                      {user.fullName}
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+          </form>
+        </Modal>
+
+        // <div
+        //   style={{
+        //     position: "absolute",
+        //     background: "#222",
+        //     border: "1px solid #555",
+        //     padding: "1rem",
+        //     borderRadius: "8px",
+        //     zIndex: 100,
+        //     width: "300px",
+        //   }}
+        // >
+        //   <strong>Edit users for role: {selectedRole}</strong>
+        //   <ul>
+        //     {allUsers.map((user) => {
+        //       const isInRole = mapUsersToRoles[selectedRole]?.some((u) => u.userName === user.userName);
+        //       return (
+        //         <li key={user.userName}>
+        //           <label>
+        //             <input
+        //               type="checkbox"
+        //               checked={isInRole}
+        //               disabled={user.userName === userName && selectedRole === "Admin" && isInRole}
+        //               onChange={() => handleRoleToggle(user.userName!, selectedRole, isInRole)}
+        //             />
+        //             {user.fullName}
+        //           </label>
+        //         </li>
+        //       );
+        //     })}
+        //   </ul>
+        //   <button onClick={() => setSelectedRole(null)}>Close</button>
+        // </div>
       )}
       <ul style={{ textAlign: "left" }}>
         {mapUsersToRoles && Object.keys(mapUsersToRoles).length > 0 ? (
@@ -158,8 +185,13 @@ export function AdminPage() {
                 <strong>
                   {usersInRole.length} {usersInRole.length === 1 ? "user" : "users"} with {role} role.
                 </strong>
-                <button onClick={() => setSelectedRole(role)} style={{ marginLeft: "1rem" }}>
-                  ⚙️ Edit
+                <button
+                  onClick={() => {
+                    setSelectedRole(role);
+                    setModalOpen(true);
+                  }}
+                >
+                  Edit Roles
                 </button>
               </li>
               <ul>
