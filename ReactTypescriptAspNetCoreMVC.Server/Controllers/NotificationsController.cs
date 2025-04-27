@@ -13,14 +13,12 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
     public class NotificationsController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AuthDbContext _context;
 
-        public NotificationsController(AuthDbContext context, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
+        public NotificationsController(AuthDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
             _userManager = userManager;
-            _roleManager = roleManager;
         }
 
         [Authorize]

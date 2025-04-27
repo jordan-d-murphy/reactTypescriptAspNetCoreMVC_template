@@ -143,39 +143,6 @@ export function AdminPage() {
             </ul>
           </form>
         </Modal>
-
-        // <div
-        //   style={{
-        //     position: "absolute",
-        //     background: "#222",
-        //     border: "1px solid #555",
-        //     padding: "1rem",
-        //     borderRadius: "8px",
-        //     zIndex: 100,
-        //     width: "300px",
-        //   }}
-        // >
-        //   <strong>Edit users for role: {selectedRole}</strong>
-        //   <ul>
-        //     {allUsers.map((user) => {
-        //       const isInRole = mapUsersToRoles[selectedRole]?.some((u) => u.userName === user.userName);
-        //       return (
-        //         <li key={user.userName}>
-        //           <label>
-        //             <input
-        //               type="checkbox"
-        //               checked={isInRole}
-        //               disabled={user.userName === userName && selectedRole === "Admin" && isInRole}
-        //               onChange={() => handleRoleToggle(user.userName!, selectedRole, isInRole)}
-        //             />
-        //             {user.fullName}
-        //           </label>
-        //         </li>
-        //       );
-        //     })}
-        //   </ul>
-        //   <button onClick={() => setSelectedRole(null)}>Close</button>
-        // </div>
       )}
       <ul style={{ textAlign: "left" }}>
         {mapUsersToRoles && Object.keys(mapUsersToRoles).length > 0 ? (

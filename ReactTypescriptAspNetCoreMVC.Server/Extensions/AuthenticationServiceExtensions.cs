@@ -9,7 +9,9 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Extensions
     {
         public static IServiceCollection AddAuthenticationServices(this IServiceCollection services, IConfiguration config)
         {
-            var jwtKey = config["Jwt:Key"] ?? Environment.GetEnvironmentVariable("Jwt__Key") ?? throw new Exception("Missing Jwt Key");
+            var jwtKey = config["Jwt:Key"] ?? throw new Exception("Missing Jwt Key");
+            var jwtIssuer = config["Jwt:Issuer"] ?? throw new Exception("Missing Jwt Issuer");
+            var jwtAudience = config["Jwt:Audience"] ?? throw new Exception("Missing Jwt Audience");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 
             services.AddAuthentication(options =>
@@ -26,8 +28,10 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Extensions
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtIssuer,
+                    ValidateAudience = true,
+                    ValidAudience = jwtAudience,
                     ClockSkew = TimeSpan.Zero
                 };
                 options.Events = new JwtBearerEvents

@@ -2,7 +2,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ReactTypescriptAspNetCoreMVC.Server.Data.Auth;
 using ReactTypescriptAspNetCoreMVC.Server.Entities;
 
 namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
