@@ -1,12 +1,12 @@
-using Auth;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ReactTypescriptAspNetCoreMVC.Server.Entities;
+using ReactTypescriptAspNetCoreMVC.Server.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Services
+namespace ReactTypescriptAspNetCoreMVC.Server.Services
 {
     public class AuthService : IAuthService
     {

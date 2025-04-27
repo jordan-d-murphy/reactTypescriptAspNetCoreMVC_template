@@ -1,6 +1,6 @@
-using Auth;
+using ReactTypescriptAspNetCoreMVC.Server.Entities;
 
-namespace Services
+namespace ReactTypescriptAspNetCoreMVC.Server.Interfaces
 {
     public interface IAuthService
     {

@@ -1,6 +1,6 @@
-using Auth;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
+using ReactTypescriptAspNetCoreMVC.Server.Data.Auth;
+using ReactTypescriptAspNetCoreMVC.Server.Entities;
 
 namespace Extensions
 {

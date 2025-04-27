@@ -1,27 +1,31 @@
-using static AdminController;
+using ReactTypescriptAspNetCoreMVC.Server.Events;
+using ReactTypescriptAspNetCoreMVC.Server.Interfaces;
 
-public class RoleEventRelay : IRoleEventRelay
+namespace ReactTypescriptAspNetCoreMVC.Server.Services
 {
-    private readonly IServiceProvider _provider;
-
-    public RoleEventRelay(IServiceProvider provider)
+    public class RoleEventRelay : IRoleEventRelay
     {
-        _provider = provider;
-    }
+        private readonly IServiceProvider _provider;
 
-    public void Register()
-    {
-        RoleEvents.OnRoleChanged += async (username, role, added) =>
+        public RoleEventRelay(IServiceProvider provider)
         {
-            using var scope = _provider.CreateScope();
-            var handler = scope.ServiceProvider.GetRequiredService<RoleChangedEventHandler>();
-            await handler.HandleRoleChange(username, role, added);
-        };
-        RoleEvents.OnNotifyAll += async (message) =>
+            _provider = provider;
+        }
+
+        public void Register()
         {
-            using var scope = _provider.CreateScope();
-            var handler = scope.ServiceProvider.GetRequiredService<RoleChangedEventHandler>();
-            await handler.HandleNotifyAll(message);
-        };
+            RoleEvents.OnRoleChanged += async (username, role, added) =>
+            {
+                using var scope = _provider.CreateScope();
+                var handler = scope.ServiceProvider.GetRequiredService<RoleChangedEventHandler>();
+                await handler.HandleRoleChange(username, role, added);
+            };
+            RoleEvents.OnNotifyAll += async (message) =>
+            {
+                using var scope = _provider.CreateScope();
+                var handler = scope.ServiceProvider.GetRequiredService<RoleChangedEventHandler>();
+                await handler.HandleNotifyAll(message);
+            };
+        }
     }
 }

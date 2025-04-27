@@ -1,21 +1,25 @@
-using static AdminController;
+using ReactTypescriptAspNetCoreMVC.Server.Interfaces;
 
-public class RoleChangedEventHandler
+namespace ReactTypescriptAspNetCoreMVC.Server.Services
 {
-    private readonly INotificationService _notificationService;
 
-    public RoleChangedEventHandler(INotificationService notificationService)
+    public class RoleChangedEventHandler
     {
-        _notificationService = notificationService;
-    }
+        private readonly INotificationService _notificationService;
 
-    public async Task HandleRoleChange(string username, string role, bool added)
-    {
-        await _notificationService.SendNotificationAsync(username, role, added);
-    }
+        public RoleChangedEventHandler(INotificationService notificationService)
+        {
+            _notificationService = notificationService;
+        }
 
-    public async Task HandleNotifyAll(string message)
-    {
-        await _notificationService.SendNotifyAllAsync(message);
+        public async Task HandleRoleChange(string username, string role, bool added)
+        {
+            await _notificationService.SendNotificationAsync(username, role, added);
+        }
+
+        public async Task HandleNotifyAll(string message)
+        {
+            await _notificationService.SendNotifyAllAsync(message);
+        }
     }
 }

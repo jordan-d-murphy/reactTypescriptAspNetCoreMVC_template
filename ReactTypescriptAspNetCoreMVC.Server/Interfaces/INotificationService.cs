@@ -1,6 +1,9 @@
-public interface INotificationService
+namespace ReactTypescriptAspNetCoreMVC.Server.Interfaces
 {
-    Task SendNotificationAsync(string username, string role, bool added);
+    public interface INotificationService
+    {
+        Task SendNotificationAsync(string username, string role, bool added);
 
-    Task SendNotifyAllAsync(string message);
+        Task SendNotifyAllAsync(string message);
+    }
 }

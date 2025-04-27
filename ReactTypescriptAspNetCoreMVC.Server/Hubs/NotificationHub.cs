@@ -1,18 +1,21 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.SignalR;
 
-public class NotificationHub : Hub
+namespace ReactTypescriptAspNetCoreMVC.Server.Hubs
 {
-    public const string HubUrl = "/hubs/notifications";
-
-    public override Task OnConnectedAsync()
+    public class NotificationHub : Hub
     {
-        var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"\n\n[Hub] Connected user: {userId}\n\n");
-        Console.ResetColor();
+        public const string HubUrl = "/hubs/notifications";
 
-        // Optional: Add to group by userId
-        return base.OnConnectedAsync();
+        public override Task OnConnectedAsync()
+        {
+            var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n\n[Hub] Connected user: {userId}\n\n");
+            Console.ResetColor();
+
+            // Optional: Add to group by userId
+            return base.OnConnectedAsync();
+        }
     }
 }

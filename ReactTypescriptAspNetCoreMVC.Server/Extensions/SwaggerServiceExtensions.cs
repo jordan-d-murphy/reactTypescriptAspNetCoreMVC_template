@@ -1,7 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace Extensions
+namespace ReactTypescriptAspNetCoreMVC.Server.Extensions
 {
     public static class SwaggerServiceExtensions
     {

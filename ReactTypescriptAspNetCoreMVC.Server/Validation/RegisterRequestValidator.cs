@@ -1,8 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Identity.Data;
-// using DTOs;
 
-namespace Validation
+namespace ReactTypescriptAspNetCoreMVC.Server.Validation
 {
     public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
     {

@@ -1,4 +1,4 @@
-using Auth;
+using ReactTypescriptAspNetCoreMVC.Server.Entities;
 
 public class Notification
 {

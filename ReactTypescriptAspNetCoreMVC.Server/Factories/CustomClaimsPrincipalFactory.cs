@@ -1,7 +1,7 @@
 using System.Security.Claims;
-using Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using ReactTypescriptAspNetCoreMVC.Server.Entities;
 
 public class CustomClaimsPrincipalFactory : UserClaimsPrincipalFactory<AppUser>
 {

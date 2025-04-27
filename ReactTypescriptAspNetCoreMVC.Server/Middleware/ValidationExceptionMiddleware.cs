@@ -1,7 +1,7 @@
 using System.Net;
 using FluentValidation;
 
-namespace Middleware
+namespace ReactTypescriptAspNetCoreMVC.Server.Middleware
 {
     public class ValidationExceptionMiddleware
     {

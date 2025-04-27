@@ -1,4 +1,7 @@
-public interface IRoleEventRelay
+namespace ReactTypescriptAspNetCoreMVC.Server.Interfaces
 {
-    void Register();
+    public interface IRoleEventRelay
+    {
+        void Register();
+    }
 }

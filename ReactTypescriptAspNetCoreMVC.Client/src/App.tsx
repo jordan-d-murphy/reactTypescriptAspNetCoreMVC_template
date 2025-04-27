@@ -69,12 +69,12 @@ function App() {
     };
   }, [token, isAuthenticated]);
 
-  useEffect(() => {
-    fetch("/api/weather")
-      .then((res) => res.json())
-      .then(setData)
-      .catch(console.error);
-  }, []);
+  // useEffect(() => {
+  //   fetch("/api/weather")
+  //     .then((res) => res.json())
+  //     .then(setData)
+  //     .catch(console.error);
+  // }, []);
 
   return (
     <>
@@ -152,7 +152,7 @@ function App() {
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
 
-      <div style={{ padding: "2rem" }}>
+      {/* <div style={{ padding: "2rem" }}>
         <h1>Weather Forecast</h1>
         <table border={1} cellPadding={8}>
           <thead>
@@ -174,7 +174,7 @@ function App() {
             ))}
           </tbody>
         </table>
-      </div>
+      </div> */}
       <div>
         <ToastContainer />
       </div>

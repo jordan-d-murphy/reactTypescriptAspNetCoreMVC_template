@@ -1,17 +1,15 @@
-using Auth;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Services;
-// using Services.Events;
-// using Services.Notifications;
+using ReactTypescriptAspNetCoreMVC.Server.Data.Auth;
+using ReactTypescriptAspNetCoreMVC.Server.Entities;
+using ReactTypescriptAspNetCoreMVC.Server.Interfaces;
+using ReactTypescriptAspNetCoreMVC.Server.Services;
 
-namespace Extensions
+namespace ReactTypescriptAspNetCoreMVC.Server.Extensions
 {
     public static class ApplicationServiceExtensions
     {

@@ -1,6 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Extensions
+namespace ReactTypescriptAspNetCoreMVC.Server.Extensions
 {
     public static class SignalRServiceExtensions
     {

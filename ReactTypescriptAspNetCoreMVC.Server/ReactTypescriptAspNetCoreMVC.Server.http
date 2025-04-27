@@ -1,6 +1,6 @@
 @ReactTypescriptAspNetCoreMVC.Server_HostAddress = http://localhost:5197
 
-GET {{ReactTypescriptAspNetCoreMVC.Server_HostAddress}}/weatherforecast/
+GET {{ReactTypescriptAspNetCoreMVC.Server_HostAddress}}/
 Accept: application/json
 
 ###

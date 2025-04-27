@@ -1,7 +1,8 @@
 using System.Net;
 using System.Text.Json;
+using ReactTypescriptAspNetCoreMVC.Server.Exceptions;
 
-namespace Middleware
+namespace ReactTypescriptAspNetCoreMVC.Server.Middleware
 {
     public class ErrorHandlingMiddleware
     {
@@ -38,20 +39,6 @@ namespace Middleware
 
                 await context.Response.WriteAsync(json);
             }
-        }
-    }
-
-    public class ApiException
-    {
-        public int StatusCode { get; }
-        public string Message { get; }
-        public string? Details { get; }
-
-        public ApiException(int statusCode, string message, string? details = null)
-        {
-            StatusCode = statusCode;
-            Message = message;
-            Details = details;
         }
     }
 }
