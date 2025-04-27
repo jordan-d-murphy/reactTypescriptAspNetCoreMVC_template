@@ -18,6 +18,7 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Extensions
             services.AddDbContext<AuthDbContext>(options =>
                 options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<RoleChangedEventHandler>();
             services.AddSingleton<IRoleEventRelay, RoleEventRelay>();

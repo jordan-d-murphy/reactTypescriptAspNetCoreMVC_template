@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axiosInstance";
 
 interface RegisterForm {
   username: string;
@@ -34,19 +35,19 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      const response = await api.post("/auth/login", { form });
+      // const response = await fetch("/api/auth/register", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(form),
+      // });
 
-      if (response.ok) {
+      if (response.data) {
         navigate("/login");
       } else {
-        const data = await response.json();
-        setError(data.title || "Registration failed.");
+        setError("Registration failed.");
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");

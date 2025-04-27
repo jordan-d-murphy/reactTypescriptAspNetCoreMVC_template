@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
+import api from "../api/axiosInstance";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -11,25 +12,13 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await api.post("/auth/login", { username, password });
 
-      if (!response.ok) {
-        console.error("Login failed:", response.status);
-        return;
-      }
-
-      const data = await response.json();
-      if (data?.token) {
-        login(data.token);
+      if (response.data?.token) {
+        login(response.data.token);
         navigate("/");
       } else {
-        console.error("Token missing in response:", data);
+        console.error("Token missing in response:", response.data);
       }
     } catch (error) {
       console.error("Login error:", error);

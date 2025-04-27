@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../auth/useAuth";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axiosInstance";
 
 export function ProfilePage() {
   const { isAuthenticated } = useAuth();
@@ -14,12 +15,9 @@ export function ProfilePage() {
       return;
     }
 
-    fetch("/api/users/me", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((res) => res.json())
+    api
+      .get("/users/me")
+      .then((res) => res.data)
       .then((data) => {
         setProfile(data);
         setLoading(false);

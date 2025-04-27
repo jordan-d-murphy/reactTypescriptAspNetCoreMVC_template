@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
+import api from "../api/axiosInstance";
 
 interface NotifyAllForm {
   message: string;
@@ -35,17 +36,25 @@ export function AdminPage() {
       return;
     }
 
-    fetch("/api/admin/dashboard", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    api
+      .get("/admin/dashboard", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
-        if (!res.ok) throw new Error("Access denied");
-        var payload = res.json();
-        console.log("res.json() payload");
-        console.log(payload);
-        return payload;
+        const data = res.data;
+        console.log(data);
+        setMapUsersToRoles(data.mapUsersToRoles);
+        setAllUsers(data.allUsers);
+        setLoading(false);
+
+        // if (!res.ok) throw new Error("Access denied");
+        // var payload = res.json();
+        // console.log("res.json() payload");
+        // console.log(payload);
+        // return payload;
+        return data;
       })
       .then((data) => {
         setMapUsersToRoles(data.mapUsersToRoles);
@@ -59,24 +68,55 @@ export function AdminPage() {
   }, [isAuthenticated, roles, token, navigate]);
 
   const handleRoleToggle = async (username: string, role: string, isCurrentlyInRole: boolean) => {
-    const method = isCurrentlyInRole ? "DELETE" : "POST";
     try {
-      const res = await fetch(`/api/admin/roles`, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ username, role }),
+      const { data } = await api({
+        url: "/admin/roles",
+        method: isCurrentlyInRole ? "delete" : "post",
+        data: { username, role },
       });
-      if (!res.ok) throw new Error("Failed to update role");
 
-      const updated = await res.json();
-      setMapUsersToRoles(updated.mapUsersToRoles);
+      setMapUsersToRoles(data.mapUsersToRoles);
     } catch (err) {
       console.error("Role update failed", err);
     }
   };
+
+  // const handleRoleToggle = async (username: string, role: string, isCurrentlyInRole: boolean) => {
+  //   const method = isCurrentlyInRole ? "delete" : "post";
+
+  //   try {
+  //     const res = await api.request({
+  //       url: "/admin/roles",
+  //       method,
+  //       data: { username, role },
+  //     });
+
+  //     const updated = res.data;
+  //     setMapUsersToRoles(updated.mapUsersToRoles);
+  //   } catch (err) {
+  //     console.error("Role update failed", err);
+  //   }
+  // };
+
+  // const handleRoleToggle = async (username: string, role: string, isCurrentlyInRole: boolean) => {
+  //   const method = isCurrentlyInRole ? "DELETE" : "POST";
+  //   try {
+  //     const res = await fetch(`/api/admin/roles`, {
+  //       method,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify({ username, role }),
+  //     });
+  //     if (!res.ok) throw new Error("Failed to update role");
+
+  //     const updated = await res.json();
+  //     setMapUsersToRoles(updated.mapUsersToRoles);
+  //   } catch (err) {
+  //     console.error("Role update failed", err);
+  //   }
+  // };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -85,27 +125,42 @@ export function AdminPage() {
   const handleNotifyAll = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    const method = "POST";
+    // const method = "POST";
     try {
-      const res = await fetch(`/api/admin/notifyall`, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(form),
-      });
-      if (!res.ok) throw new Error("Failed to notify all");
-
-      const success = await res.json();
+      const res = await api.post("/admin/notifyall");
       setForm({ message: "" });
-      console.log(success);
-      return success;
+      console.log(res.data);
+      return res.data;
     } catch (err) {
       console.error("Notify all failed", err);
       setError("Something went wrong trying to notify all users. Please try again.");
     }
   };
+
+  // const handleNotifyAll = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setError(null);
+  //   const method = "POST";
+  //   try {
+  //     const res = await fetch(`/api/admin/notifyall`, {
+  //       method,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify(form),
+  //     });
+  //     if (!res.ok) throw new Error("Failed to notify all");
+
+  //     const success = await res.json();
+  //     setForm({ message: "" });
+  //     console.log(success);
+  //     return success;
+  //   } catch (err) {
+  //     console.error("Notify all failed", err);
+  //     setError("Something went wrong trying to notify all users. Please try again.");
+  //   }
+  // };
 
   if (loading) return <p>Loading...</p>;
 

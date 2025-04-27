@@ -18,6 +18,9 @@ import * as signalR from "@microsoft/signalr";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "./auth/useAuth";
 import "react-toastify/dist/ReactToastify.css";
+import { setNavigate } from "./router";
+import { useNavigate } from "react-router-dom";
+import NavigateSetter from "./NavigateSetter";
 
 type Forecast = {
   date: string;
@@ -31,6 +34,12 @@ function App() {
   const [count, setCount] = useState(0);
   const [data, setData] = useState<Forecast[]>([]);
   const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
+
+  // const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   setNavigate(navigate);
+  // }, [navigate]);
 
   useEffect(() => {
     const connect = async () => {
@@ -79,6 +88,7 @@ function App() {
   return (
     <>
       <Router>
+        <NavigateSetter />
         <Nav />
         <Routes>
           <Route path="/" element={<h1>Welcome to the Tools App</h1>} />

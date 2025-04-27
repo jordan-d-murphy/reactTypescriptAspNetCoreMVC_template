@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import api from "../api/axiosInstance";
 
 type Notification = {
   id: number;
@@ -11,18 +12,12 @@ export function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
-    fetch("/api/notifications/me", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
+    api
+      .get("/notifications/me")
       .then((res) => {
-        var notifications = res.json();
-
-        console.log("notifications:");
-        console.log(notifications);
-
-        return notifications;
+        console.log("res.data:");
+        console.log(res.data);
+        return res.data;
       })
       .then(setNotifications)
       .catch((err) => console.error("Error fetching notifications:", err));

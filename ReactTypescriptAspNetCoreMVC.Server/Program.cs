@@ -4,6 +4,7 @@ using ReactTypescriptAspNetCoreMVC.Server.Hubs;
 using ReactTypescriptAspNetCoreMVC.Server.Interfaces;
 using ReactTypescriptAspNetCoreMVC.Server.Middleware;
 using ReactTypescriptAspNetCoreMVC.Server.Services;
+using ReactTypescriptAspNetCoreMVC.Server.Settings;
 using ReactTypescriptAspNetCoreMVC.Server.Setup;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 // Add services
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices();
 builder.Services.AddAuthenticationServices(builder.Configuration);
@@ -24,19 +27,22 @@ builder.Services.AddSwaggerDocumentation();
 builder.Services.AddCorsPolicy();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddSingleton<IRoleEventRelay, RoleEventRelay>();
 
 // Build app
 var app = builder.Build();
 
 // Middlewares
-app.UseRouting();
-app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseCors("CorsPolicy");
-app.UseMiddleware<ValidationExceptionMiddleware>();
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<ValidationExceptionMiddleware>();
+
+app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
@@ -44,7 +50,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapControllers();
+
+
+
+
 app.MapHub<NotificationHub>(NotificationHub.HubUrl);
 
 using (var scope = app.Services.CreateScope())
