@@ -71,7 +71,8 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
 
             var refreshToken = _tokenService.CreateRefreshToken();
 
-            _tokenService.SaveRefreshToken(user.Id, refreshToken);
+            // _tokenService.SaveRefreshToken(user.Id, refreshToken);
+            await _tokenService.SaveRefreshTokenAsync(user, refreshToken);
 
             var cookieOptions = new CookieOptions
             {
@@ -88,12 +89,25 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
 
         [HttpPost("logout")]
         [AllowAnonymous]
-        public IActionResult Logout()
+        public async Task<IActionResult> LogoutAsync([FromBody] RefreshRequest refreshRequest)
         {
-            // Delete refresh token cookie
-            Response.Cookies.Delete("refreshToken");
+            if (!Request.Cookies.TryGetValue("refreshToken", out var refreshTokenFromCookie))
+            {
+                return Unauthorized();
+            }
 
-            // (Optional) Invalidate refresh token server-side if you want (future step)
+            var userId = refreshRequest.UserId;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Missing userId.");
+            }
+
+            // Revoke the refresh token
+            await _tokenService.RevokeRefreshTokenAsync(userId, refreshTokenFromCookie);
+
+            // Delete refresh token cookie from browser
+            Response.Cookies.Delete("refreshToken");
 
             return Ok();
         }
@@ -112,16 +126,18 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
             // simple version assuming userId is known:
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user == null || !_tokenService.ValidateRefreshToken(user.Id, refreshToken))
+            if (user == null || !await _tokenService.ValidateRefreshTokenAsync(user, refreshToken))
             {
                 return Unauthorized();
             }
+
+            await _tokenService.RevokeRefreshTokenAsync(user.Id, refreshToken);
 
             var roles = await _userManager.GetRolesAsync(user);
             var newAccessToken = _tokenService.CreateToken(user, roles);
             var newRefreshToken = _tokenService.CreateRefreshToken();
 
-            _tokenService.SaveRefreshToken(user.Id, newRefreshToken);
+            await _tokenService.SaveRefreshTokenAsync(user, newRefreshToken);
 
             var cookieOptions = new CookieOptions
             {

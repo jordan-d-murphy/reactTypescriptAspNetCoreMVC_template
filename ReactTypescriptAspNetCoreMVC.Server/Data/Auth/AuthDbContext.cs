@@ -10,6 +10,8 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Data.Auth
             : base(options) { }
 
         public DbSet<Notification> Notifications { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }
 

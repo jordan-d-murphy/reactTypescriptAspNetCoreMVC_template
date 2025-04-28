@@ -8,8 +8,14 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Interfaces
 
         string CreateRefreshToken();
 
-        void SaveRefreshToken(string userId, string refreshToken);
+        // void SaveRefreshToken(string userId, string refreshToken);
 
-        bool ValidateRefreshToken(string userId, string refreshToken);
+        // void SaveRefreshTokenAsync(string userId, string refreshToken);
+        Task SaveRefreshTokenAsync(AppUser user, string refreshToken);
+
+        // bool ValidateRefreshToken(string userId, string refreshToken);
+        Task<bool> ValidateRefreshTokenAsync(AppUser user, string refreshToken);
+
+        Task RevokeRefreshTokenAsync(string userId, string refreshToken);
     }
 }

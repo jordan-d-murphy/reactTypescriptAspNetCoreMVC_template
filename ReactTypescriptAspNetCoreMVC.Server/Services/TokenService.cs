@@ -2,8 +2,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using ReactTypescriptAspNetCoreMVC.Server.Data.Auth;
 using ReactTypescriptAspNetCoreMVC.Server.Entities;
 using ReactTypescriptAspNetCoreMVC.Server.Interfaces;
 using ReactTypescriptAspNetCoreMVC.Server.Settings;
@@ -14,12 +16,13 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Services
     {
 
         // this is temporary, add to db later
-        private static readonly Dictionary<string, string> _refreshTokens = new Dictionary<string, string>();
-
+        // private static readonly Dictionary<string, string> _refreshTokens = new Dictionary<string, string>();
+        private readonly AuthDbContext _context;
 
         private readonly JwtSettings _jwtSettings;
-        public TokenService(IOptions<JwtSettings> options)
+        public TokenService(AuthDbContext context, IOptions<JwtSettings> options)
         {
+            _context = context;
             _jwtSettings = options.Value;
         }
 
@@ -45,9 +48,9 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Services
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                // expires: DateTime.UtcNow.AddSeconds(30), // Super short expiry for testing in dev!
+                expires: DateTime.UtcNow.AddSeconds(30), // Super short expiry for testing in dev!
 
-                expires: DateTime.UtcNow.AddHours(1), // for actual use
+                // expires: DateTime.UtcNow.AddHours(1), // for actual use
 
                 signingCredentials: creds);
 
@@ -62,14 +65,59 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Services
             return Convert.ToBase64String(randomBytes);
         }
 
-        public void SaveRefreshToken(string userId, string refreshToken)
+        // public void SaveRefreshToken(string userId, string refreshToken)
+        // {
+        //     _refreshTokens[userId] = refreshToken;
+        // }
+
+        // public bool ValidateRefreshToken(string userId, string refreshToken)
+        // {
+        //     return _refreshTokens.TryGetValue(userId, out var savedToken) && savedToken == refreshToken;
+        // }
+
+        public async Task SaveRefreshTokenAsync(AppUser user, string refreshToken)
         {
-            _refreshTokens[userId] = refreshToken;
+            var newToken = new RefreshToken
+            {
+                Token = refreshToken,
+                Expires = DateTime.UtcNow.AddDays(7),
+                AppUserId = user.Id,
+            };
+
+            _context.RefreshTokens.Add(newToken);
+            await _context.SaveChangesAsync();
         }
 
-        public bool ValidateRefreshToken(string userId, string refreshToken)
+        public async Task<bool> ValidateRefreshTokenAsync(AppUser user, string refreshToken)
         {
-            return _refreshTokens.TryGetValue(userId, out var savedToken) && savedToken == refreshToken;
+            var token = await _context.RefreshTokens
+                .Where(rt => rt.AppUserId == user.Id && rt.Token == refreshToken && !rt.IsRevoked && rt.Expires > DateTime.UtcNow)
+                .FirstOrDefaultAsync();
+
+            return token != null;
         }
+
+        public async Task RevokeRefreshTokenAsync(string userId, string refreshToken)
+        {
+            var token = await _context.RefreshTokens
+                .Where(rt => rt.AppUserId == userId && rt.Token == refreshToken && !rt.IsRevoked)
+                .FirstOrDefaultAsync();
+
+            if (token != null)
+            {
+                token.IsRevoked = true;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        // public void SaveRefreshTokenAsync(string userId, string refreshToken)
+        // {
+        //     throw new NotImplementedException();
+        // }
+
+        // public bool ValidateRefreshToken(string userId, string refreshToken)
+        // {
+        //     throw new NotImplementedException();
+        // }
     }
 }
