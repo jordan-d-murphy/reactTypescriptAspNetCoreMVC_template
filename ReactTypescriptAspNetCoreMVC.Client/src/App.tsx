@@ -4,11 +4,9 @@ import { ProtectedRoute } from "./routes/ProtectedRoute";
 import { useAuth } from "./auth/useAuth";
 import { Nav } from "./components/Nav";
 import NavigateSetter from "./NavigateSetter";
-
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-
 import UuidPage from "./pages/UuidPage";
 import TimestampPage from "./pages/TimestampPage";
 import RandomNumberPage from "./pages/RandomNumberPage";
@@ -18,11 +16,9 @@ import { ProfilePage } from "./pages/ProfilePage";
 import { AdminPage } from "./pages/AdminPage";
 import { NotificationsPage } from "./pages/NotificationsPage";
 import NotFoundPage from "./pages/NotFoundPage";
-
 import * as signalR from "@microsoft/signalr";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import AxiosErrorListener from "./api/AxiosErrorListener";
 
 function App() {
@@ -77,59 +73,18 @@ function App() {
         <AxiosErrorListener />
         <Nav />
         <Routes>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
+            <Route path="/timestamp" element={<TimestampPage />} />
+            <Route path="/uuid" element={<UuidPage />} />
+            <Route path="/random" element={<RandomNumberPage />} />
+            <Route path="/admin" element={<AdminPage />} />
+          </Route>
+
           <Route path="/" element={<h1>Welcome to the Tools App</h1>} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-
-          <Route
-            path="/uuid"
-            element={
-              <ProtectedRoute>
-                <UuidPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/timestamp"
-            element={
-              <ProtectedRoute>
-                <TimestampPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/random"
-            element={
-              <ProtectedRoute>
-                <RandomNumberPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <ProfilePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/notifications"
-            element={
-              <ProtectedRoute>
-                <NotificationsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminPage />
-              </ProtectedRoute>
-            }
-          />
-
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>

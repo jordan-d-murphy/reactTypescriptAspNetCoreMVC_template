@@ -69,7 +69,71 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
             var roles = await _userManager.GetRolesAsync(user);
             var token = _tokenService.CreateToken(user, roles);
 
+            var refreshToken = _tokenService.CreateRefreshToken();
+
+            _tokenService.SaveRefreshToken(user.Id, refreshToken);
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                Secure = true, // important in production (HTTPS only)
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+
+            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+
             return Ok(new { token });
+        }
+
+        [HttpPost("logout")]
+        [AllowAnonymous]
+        public IActionResult Logout()
+        {
+            // Delete refresh token cookie
+            Response.Cookies.Delete("refreshToken");
+
+            // (Optional) Invalidate refresh token server-side if you want (future step)
+
+            return Ok();
+        }
+
+        [HttpPost("refresh")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Refresh([FromBody] RefreshRequest refreshRequest)
+        {
+            if (!Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
+            {
+                return Unauthorized();
+            }
+
+            var userId = refreshRequest.UserId;
+
+            // simple version assuming userId is known:
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null || !_tokenService.ValidateRefreshToken(user.Id, refreshToken))
+            {
+                return Unauthorized();
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var newAccessToken = _tokenService.CreateToken(user, roles);
+            var newRefreshToken = _tokenService.CreateRefreshToken();
+
+            _tokenService.SaveRefreshToken(user.Id, newRefreshToken);
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                Secure = true,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+
+            Response.Cookies.Append("refreshToken", newRefreshToken, cookieOptions);
+
+            return Ok(new { accessToken = newAccessToken });
         }
     }
 }

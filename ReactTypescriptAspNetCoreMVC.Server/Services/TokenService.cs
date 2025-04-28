@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +12,11 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Services
 {
     public class TokenService : ITokenService
     {
+
+        // this is temporary, add to db later
+        private static readonly Dictionary<string, string> _refreshTokens = new Dictionary<string, string>();
+
+
         private readonly JwtSettings _jwtSettings;
         public TokenService(IOptions<JwtSettings> options)
         {
@@ -39,10 +45,31 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Services
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
+                // expires: DateTime.UtcNow.AddSeconds(30), // Super short expiry for testing in dev!
+
+                expires: DateTime.UtcNow.AddHours(1), // for actual use
+
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string CreateRefreshToken()
+        {
+            var randomBytes = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomBytes);
+            return Convert.ToBase64String(randomBytes);
+        }
+
+        public void SaveRefreshToken(string userId, string refreshToken)
+        {
+            _refreshTokens[userId] = refreshToken;
+        }
+
+        public bool ValidateRefreshToken(string userId, string refreshToken)
+        {
+            return _refreshTokens.TryGetValue(userId, out var savedToken) && savedToken == refreshToken;
         }
     }
 }

@@ -97,6 +97,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       lastName: (decoded["family_name"] as string) || "",
     };
 
+    localStorage.setItem("user", JSON.stringify(user));
+
     const rawRoles =
       decoded.role ||
       decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
@@ -117,6 +119,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setAuthState({
       isAuthenticated: false,
       user: null,
