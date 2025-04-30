@@ -28,6 +28,9 @@ export function Nav() {
           <Link to="/random" style={{ marginRight: "1rem" }}>
             Random Number
           </Link>
+          <Link to="/projects" style={{ marginRight: "1rem" }}>
+            Projects
+          </Link>
           <Link to="/profile" style={{ marginRight: "1rem" }}>
             Profile
           </Link>

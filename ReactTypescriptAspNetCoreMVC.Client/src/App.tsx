@@ -20,6 +20,8 @@ import * as signalR from "@microsoft/signalr";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AxiosErrorListener from "./api/AxiosErrorListener";
+import { ProjectDetails } from "./pages/ProjectDetailsPage";
+import { ProjectsPage } from "./features/projects/ProjectsPage";
 
 function App() {
   const { token, isAuthenticated } = useAuth();
@@ -79,6 +81,7 @@ function App() {
             <Route path="/timestamp" element={<TimestampPage />} />
             <Route path="/uuid" element={<UuidPage />} />
             <Route path="/random" element={<RandomNumberPage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/admin" element={<AdminPage />} />
           </Route>
 

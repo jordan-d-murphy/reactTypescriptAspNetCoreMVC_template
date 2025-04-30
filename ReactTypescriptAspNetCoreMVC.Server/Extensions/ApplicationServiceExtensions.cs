@@ -24,6 +24,7 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Extensions
             services.AddScoped<RoleChangedEventHandler>();
             services.AddSingleton<IRoleEventRelay, RoleEventRelay>();
             services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, CustomClaimsPrincipalFactory>();
+            services.AddScoped<IProjectService, ProjectService>();
 
             services.AddControllers(options =>
             {

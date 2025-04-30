@@ -12,6 +12,10 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Data.Auth
         public DbSet<Notification> Notifications { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+
+        public DbSet<Project> Projects => Set<Project>();
+
+        public DbSet<TaskItem> TaskItems => Set<TaskItem>();
     }
 }
 
