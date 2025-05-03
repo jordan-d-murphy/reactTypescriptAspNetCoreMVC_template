@@ -1,8 +1,26 @@
 import { TypingText } from "@/components/TypingText";
-import bonsaiImage from "../../assets/bonsai-main.jpg";
+import bonsaiImage from "@/assets/bonsai.webp";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function HomePage() {
+  const [isPageLoading, setIsPageLoading] = useState(true);
+
   const words = ["amazing", "modern", "fast", "stunning", "secure", "classy", "scalable", "reliable", "fun"];
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setIsPageLoading(false), 500); // adjust to your desired delay
+    return () => clearTimeout(timeout);
+  }, []);
+
+  if (isPageLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
   return (
     <div className="columns-2">
       <div className="flex min-h-screen flex-col items-left justify-center text-left p-15">

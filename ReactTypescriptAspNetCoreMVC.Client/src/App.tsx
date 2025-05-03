@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import NavigateSetter from "@/components/NavigateSetter";
 import AxiosErrorListener from "@/api/AxiosErrorListener";
 import { routes } from "@/routing/routes";
+import { Loader2 } from "lucide-react";
 
 function RoutesWrapper() {
   const element = useRoutes(routes);
@@ -15,7 +16,7 @@ function RoutesWrapper() {
 }
 
 function App() {
-  const { token, isAuthenticated } = useAuth();
+  const { loading, token, isAuthenticated } = useAuth();
   const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
 
   useEffect(() => {
@@ -57,6 +58,14 @@ function App() {
       connection?.stop();
     };
   }, [token, isAuthenticated]);
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <>
