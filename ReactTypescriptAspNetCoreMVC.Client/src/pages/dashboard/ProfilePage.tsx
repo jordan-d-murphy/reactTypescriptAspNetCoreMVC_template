@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../../auth/useAuth";
 import { useNavigate } from "react-router-dom";
-import api from "../api/axiosInstance";
+import api from "../../api/axiosInstance";
 
 export default function ProfilePage() {
   const { isAuthenticated } = useAuth();

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/axiosInstance";
+import api from "@/api/axiosInstance";
 
 interface RegisterForm {
   username: string;

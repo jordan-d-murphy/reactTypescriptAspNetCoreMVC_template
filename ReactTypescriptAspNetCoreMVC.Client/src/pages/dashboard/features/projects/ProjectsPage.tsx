@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ProjectForm } from "./ProjectForm";
 import { ProjectDetails } from "./ProjectDetails";
-import api from "../../api/axiosInstance";
+import api from "@/api/axiosInstance";
+import { Project } from "./types";
 
 export const ProjectsPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);

@@ -1,27 +1,33 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useRoutes } from "react-router-dom";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 import { useAuth } from "./auth/useAuth";
 import { Nav } from "./components/Nav";
-import NavigateSetter from "./NavigateSetter";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import UuidPage from "./pages/UuidPage";
-import TimestampPage from "./pages/TimestampPage";
-import RandomNumberPage from "./pages/RandomNumberPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import ProfilePage from "./pages/ProfilePage";
-import AdminPage from "./pages/AdminPage";
-import NotificationsPage from "./pages/NotificationsPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import UuidPage from "@/pages/dashboard/UuidPage";
+import TimestampPage from "@/pages/dashboard/TimestampPage";
+import RandomNumberPage from "@/pages/dashboard/RandomNumberPage";
+import LoginPage from "@/pages/auth/LoginPage";
+import RegisterPage from "@/pages/auth/RegisterPage";
+import ProfilePage from "@/pages/dashboard/ProfilePage";
+import AdminPage from "@/pages/dashboard/AdminPage";
+import NotificationsPage from "@/pages/dashboard/NotificationsPage";
+import NotFoundPage from "@/pages/public/NotFoundPage";
 import * as signalR from "@microsoft/signalr";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AxiosErrorListener from "./api/AxiosErrorListener";
-import DashboardPage from "./pages/DashboardPage";
-import { ProjectsPage } from "./features/projects/ProjectsPage";
+import DashboardPage from "./pages/dashboard/DashboardPage";
+import { ProjectsPage } from "@/pages/dashboard/features/projects/ProjectsPage";
+import NavigateSetter from "@/components/NavigateSetter";
+import AxiosErrorListener from "@/api/AxiosErrorListener";
+import { routes } from "@/routes/routes";
+
+function RoutesWrapper() {
+  const element = useRoutes(routes);
+  return element;
+}
 
 function App() {
   const { token, isAuthenticated } = useAuth();
@@ -73,6 +79,14 @@ function App() {
       <Router>
         <NavigateSetter />
         <AxiosErrorListener />
+        <RoutesWrapper />
+      </Router>
+
+      <ToastContainer />
+
+      {/* <Router>
+        <NavigateSetter />
+        <AxiosErrorListener />
         <Nav />
         <Routes>
           <Route element={<ProtectedRoute />}>
@@ -91,8 +105,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-      </Router>
-
+      </Router> 
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -108,9 +121,7 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-
-      <ToastContainer />
+      <p className="read-the-docs">Click on the Vite and React logos to learn more</p> */}
     </>
   );
 }

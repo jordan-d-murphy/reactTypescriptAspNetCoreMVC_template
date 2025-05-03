@@ -4,21 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import axios from "axios";
 import api from "@/api/axiosInstance";
+import { Project } from "./types";
 
-type Project = {
-  id: number;
+interface ProjectFormValues {
   title: string;
-  description: string;
-  sharedWithRole?: string | null;
-};
-
-type FormData = {
-  title: string;
-  description: string;
+  description?: string;
   sharedWithRole?: string;
-};
+}
 
 type Props = {
   project?: Project;
@@ -30,7 +23,7 @@ export const ProjectForm = ({ project, onSubmit }: Props) => {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<FormData>({
+  } = useForm<ProjectFormValues>({
     defaultValues: {
       title: project?.title || "",
       description: project?.description || "",
@@ -38,22 +31,7 @@ export const ProjectForm = ({ project, onSubmit }: Props) => {
     },
   });
 
-  // const submit = async (data: FormData) => {
-  //   try {
-  //     let response;
-  //     if (project) {
-  //       response = await axios.put(`/api/projects/${project.id}`, { ...project, ...data });
-  //       onSubmit({ ...project, ...data });
-  //     } else {
-  //       response = await axios.post(`/api/projects`, data);
-  //       onSubmit(response.data);
-  //     }
-  //   } catch (err) {
-  //     console.error("Project submission error:", err);
-  //   }
-  // };
-
-  const submit = async (data: FormData) => {
+  const submit = async (data: ProjectFormValues) => {
     try {
       let response;
       if (project) {

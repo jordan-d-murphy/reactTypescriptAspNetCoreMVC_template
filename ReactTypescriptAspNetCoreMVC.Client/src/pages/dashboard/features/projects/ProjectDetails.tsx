@@ -3,22 +3,23 @@ import axios from "axios";
 import { TaskList } from "./TaskList";
 import { TaskForm } from "./TaskForm";
 import { Button } from "@/components/ui/button";
-import api from "../../api/axiosInstance";
+import api from "@/api/axiosInstance";
+import { Project, TaskItem } from "./types";
 
-type TaskItem = {
-  id: number;
-  title: string;
-  isComplete: boolean;
-  projectId: number;
-};
+// type TaskItem = {
+//   id: number;
+//   title: string;
+//   isComplete: boolean;
+//   projectId: number;
+// };
 
-type Project = {
-  id: number;
-  title: string;
-  description: string;
-  sharedWithRole?: string | null;
-  tasks: TaskItem[];
-};
+// type Project = {
+//   id: number;
+//   title: string;
+//   description: string;
+//   sharedWithRole?: string | null;
+//   tasks: TaskItem[];
+// };
 
 type Props = {
   project: Project;

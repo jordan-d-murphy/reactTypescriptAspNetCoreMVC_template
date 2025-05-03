@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/useAuth";
-import api from "../api/axiosInstance";
+import { useAuth } from "@/auth/useAuth";
+import api from "@/api/axiosInstance";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -16,7 +16,7 @@ export default function LoginPage() {
 
       if (response.data?.token) {
         login(response.data.token);
-        navigate("/");
+        navigate("/app");
       } else {
         console.error("Token missing in response:", response.data);
       }

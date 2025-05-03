@@ -8,9 +8,9 @@ export function ModeToggle() {
 
   return (
     <div className="flex items-center p-1 ml-1 space-x-2">
-      <Label htmlFor="toggle-mode">Dark</Label>
-      <Switch id="toggle-mode" checked={isDark} onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")} />
       <Label htmlFor="toggle-mode">Light</Label>
+      <Switch id="toggle-mode" checked={isDark} onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")} />
+      <Label htmlFor="toggle-mode">Dark</Label>
     </div>
   );
 }

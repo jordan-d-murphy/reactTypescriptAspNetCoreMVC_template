@@ -1,13 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-
-type TaskItem = {
-  id: number;
-  title: string;
-  isComplete: boolean;
-  projectId: number;
-};
+import { TaskItem } from "./types";
 
 type Props = {
   tasks: TaskItem[];
