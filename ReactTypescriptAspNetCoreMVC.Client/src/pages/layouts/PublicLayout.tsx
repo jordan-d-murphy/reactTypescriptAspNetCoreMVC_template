@@ -1,7 +1,7 @@
 // src/components/layout/PublicLayout.tsx
 import { ModeToggle } from "@/components/mode-toggle";
 import { Outlet } from "react-router-dom";
-import { PublicNav } from "../PublicNav";
+import { PublicNav } from "@/components/PublicNav";
 // import { Toaster } from "@/components/ui/toaster";
 
 export default function PublicLayout() {

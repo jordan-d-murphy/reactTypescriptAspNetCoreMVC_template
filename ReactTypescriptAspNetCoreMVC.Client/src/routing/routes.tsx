@@ -1,7 +1,7 @@
 // src/routes.tsx
 import { Outlet, RouteObject } from "react-router-dom";
-import DashboardLayout from "@/components/layouts/DashboardLayout";
-import PublicLayout from "@/components/layouts/PublicLayout";
+import DashboardLayout from "@/pages/layouts/DashboardLayout";
+import PublicLayout from "@/pages/layouts/PublicLayout";
 
 // Import your pages
 import DashboardPage from "@/pages/dashboard/DashboardPage";
@@ -16,6 +16,7 @@ import UuidPage from "@/pages/dashboard/UuidPage";
 import RandomNumberPage from "@/pages/dashboard/RandomNumberPage";
 import AdminPage from "@/pages/dashboard/AdminPage";
 import NotFoundPage from "@/pages/public/NotFoundPage";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 export const routes: RouteObject[] = [
   {
@@ -30,7 +31,11 @@ export const routes: RouteObject[] = [
   },
   {
     path: "/app",
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { index: true, element: <DashboardPage /> },
       { path: "admin", element: <AdminPage /> },

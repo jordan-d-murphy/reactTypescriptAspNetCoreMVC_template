@@ -58,7 +58,7 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const userId = getUserId(); // you already have decoded user object on client!
+        const userId = getUserId(); // already have decoded user object on client
         const refreshResponse = await api.post("/auth/refresh", { userId });
 
         const newAccessToken = refreshResponse.data.accessToken;
@@ -71,7 +71,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
-        logoutUser(); // Clear everything
+        logoutUser(); // Clears everything
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

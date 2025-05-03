@@ -1,5 +1,5 @@
-import { jwtDecode } from "jwt-decode";
 import { createContext, useState, useEffect, ReactNode } from "react";
+import { jwtDecode } from "jwt-decode";
 import { UserType } from "../types/UserType";
 
 type AuthContextType = {
@@ -18,7 +18,7 @@ export const AuthContext = createContext<AuthContextType>({
   login: () => {},
   logout: () => {},
   isAuthenticated: false,
-  loading: false,
+  loading: true,
   roles: [],
 });
 
@@ -29,63 +29,16 @@ interface JwtPayload {
 }
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [authState, setAuthState] = useState<AuthContextType>({
-    isAuthenticated: false,
-    user: null,
-    token: null,
-    roles: [],
-    login: () => {},
-    logout: () => {},
-    loading: false,
-  });
-
-  useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    if (savedToken) {
-      const decoded: JwtPayload = jwtDecode(savedToken);
-
-      console.log("[AuthContext] Rehydrated decoded:", decoded);
-
-      const user: UserType = {
-        id: decoded.sub as string,
-        username: (decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] as string) || "",
-        email: (decoded["email"] as string) || "",
-        displayName: (decoded["displayName"] as string) || "",
-        firstName: (decoded["given_name"] as string) || "",
-        lastName: (decoded["family_name"] as string) || "",
-      };
-
-      const rawRoles =
-        decoded.role ||
-        decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
-        decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role"];
-
-      const roles = Array.isArray(rawRoles) ? rawRoles : rawRoles ? [rawRoles] : [];
-
-      setAuthState({
-        isAuthenticated: true,
-        user: user ?? null,
-        token: savedToken,
-        roles,
-        login,
-        logout,
-        loading: false,
-      });
-    } else {
-      setAuthState({
-        isAuthenticated: false,
-        user: null,
-        token: null,
-        roles: [],
-        login,
-        logout,
-        loading: false,
-      });
-    }
-  }, []);
+  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
+  const [roles, setRoles] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const login = (token: string) => {
     localStorage.setItem("token", token);
+    setToken(token);
+
     const decoded: JwtPayload = jwtDecode(token);
 
     const user: UserType = {
@@ -97,8 +50,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       lastName: (decoded["family_name"] as string) || "",
     };
 
-    localStorage.setItem("user", JSON.stringify(user));
-
     const rawRoles =
       decoded.role ||
       decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
@@ -106,30 +57,45 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const roles = Array.isArray(rawRoles) ? rawRoles : rawRoles ? [rawRoles] : [];
 
-    setAuthState({
-      isAuthenticated: true,
-      user: user ?? null,
-      token,
-      roles,
-      login,
-      logout,
-      loading: false,
-    });
+    setUser(user);
+    setRoles(roles);
+    setIsAuthenticated(true);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setAuthState({
-      isAuthenticated: false,
-      user: null,
-      token: null,
-      roles: [],
-      login,
-      logout,
-      loading: false,
-    });
+    setToken(null);
+    setUser(null);
+    setRoles([]);
+    setIsAuthenticated(false);
   };
 
-  return <AuthContext.Provider value={authState}>{children}</AuthContext.Provider>;
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    if (savedToken) {
+      try {
+        login(savedToken);
+      } catch (error) {
+        console.error("Failed to rehydrate token:", error);
+        logout();
+      }
+    }
+    setLoading(false);
+  }, []);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        token,
+        user,
+        login,
+        logout,
+        isAuthenticated,
+        loading,
+        roles,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };

@@ -14,6 +14,11 @@ import {
   //   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
+import { Link } from "react-router-dom";
+import type { ComponentRef } from "react";
+
+import { useAuth } from "@/auth/useAuth";
+
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "Alert Dialog",
@@ -50,6 +55,7 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export function PublicNav() {
+  const { isAuthenticated, user } = useAuth();
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -73,15 +79,21 @@ export function PublicNav() {
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/login" title="Login">
+              <ListItem to="/login" title="Login">
                 Re-usable components built using Radix UI and Tailwind CSS.
               </ListItem>
-              <ListItem href="/register" title="Register">
+              <ListItem to="/register" title="Register">
                 How to install dependencies and structure your app.
               </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Typography">
-                Styles for headings, paragraphs, lists...etc
-              </ListItem>
+              {isAuthenticated ? (
+                <ListItem to="/app" title="Dashboard">
+                  Access your dashboard.
+                </ListItem>
+              ) : (
+                <ListItem to="/login" title="Login">
+                  Sign in to access protected tools.
+                </ListItem>
+              )}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
@@ -90,7 +102,7 @@ export function PublicNav() {
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
               {components.map((component) => (
-                <ListItem key={component.title} title={component.title} href={component.href}>
+                <ListItem key={component.title} title={component.title} to={component.href}>
                   {component.description}
                 </ListItem>
               ))}
@@ -102,25 +114,25 @@ export function PublicNav() {
   );
 }
 
-const ListItem = React.forwardRef<React.ElementRef<"a">, React.ComponentPropsWithoutRef<"a">>(
-  ({ className, title, children, ...props }, ref) => {
-    return (
-      <li>
-        <NavigationMenuLink asChild>
-          <a
-            ref={ref}
-            className={cn(
-              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-              className
-            )}
-            {...props}
-          >
-            <div className="text-sm font-medium leading-none">{title}</div>
-            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{children}</p>
-          </a>
-        </NavigationMenuLink>
-      </li>
-    );
-  }
-);
-ListItem.displayName = "ListItem";
+const ListItem = React.forwardRef<
+  ComponentRef<typeof Link>,
+  React.ComponentPropsWithoutRef<typeof Link> & { title: string }
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <Link
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{children}</p>
+        </Link>
+      </NavigationMenuLink>
+    </li>
+  );
+});
