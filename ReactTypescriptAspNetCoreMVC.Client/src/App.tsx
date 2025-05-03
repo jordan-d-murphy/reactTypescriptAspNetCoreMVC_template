@@ -12,15 +12,15 @@ import TimestampPage from "./pages/TimestampPage";
 import RandomNumberPage from "./pages/RandomNumberPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import { ProfilePage } from "./pages/ProfilePage";
-import { AdminPage } from "./pages/AdminPage";
-import { NotificationsPage } from "./pages/NotificationsPage";
+import ProfilePage from "./pages/ProfilePage";
+import AdminPage from "./pages/AdminPage";
+import NotificationsPage from "./pages/NotificationsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import * as signalR from "@microsoft/signalr";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AxiosErrorListener from "./api/AxiosErrorListener";
-import { ProjectDetails } from "./pages/ProjectDetailsPage";
+import DashboardPage from "./pages/DashboardPage";
 import { ProjectsPage } from "./features/projects/ProjectsPage";
 
 function App() {
@@ -83,6 +83,7 @@ function App() {
             <Route path="/random" element={<RandomNumberPage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
           </Route>
 
           <Route path="/" element={<h1>Welcome to the Tools App</h1>} />

@@ -8,7 +8,7 @@ type Notification = {
   isRead: boolean;
 };
 
-export function NotificationsPage() {
+export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {

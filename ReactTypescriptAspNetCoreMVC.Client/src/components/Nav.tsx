@@ -37,6 +37,9 @@ export function Nav() {
           <Link to="/notifications" style={{ marginRight: "1rem" }}>
             Notifications
           </Link>
+          <Link to="/dashboard" style={{ marginRight: "1rem" }}>
+            Dashboard
+          </Link>
 
           {isAuthenticated && roles.includes("Admin") && (
             <Link to="/admin" style={{ marginRight: "1rem" }}>

@@ -3,7 +3,7 @@ import { useAuth } from "../auth/useAuth";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
 
-export function ProfilePage() {
+export default function ProfilePage() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);

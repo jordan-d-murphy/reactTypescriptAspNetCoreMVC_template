@@ -17,7 +17,7 @@ type AppUser = {
   isAdmin: boolean;
 };
 
-export function AdminPage() {
+export default function AdminPage() {
   const { isAuthenticated, token, roles } = useAuth();
   const [mapUsersToRoles, setMapUsersToRoles] = useState<Record<string, AppUser[]>>({});
   const [allUsers, setAllUsers] = useState<AppUser[]>([]);
