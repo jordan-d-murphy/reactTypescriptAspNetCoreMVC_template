@@ -79,10 +79,10 @@ export function PublicNav() {
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem to="/login" title="Login">
+              <ListItem to="/login" title="Login (old)">
                 Re-usable components built using Radix UI and Tailwind CSS.
               </ListItem>
-              <ListItem to="/register" title="Register">
+              <ListItem to="/register" title="Register (old)">
                 How to install dependencies and structure your app.
               </ListItem>
               {isAuthenticated ? (
@@ -90,8 +90,8 @@ export function PublicNav() {
                   Access your dashboard.
                 </ListItem>
               ) : (
-                <ListItem to="/login" title="Login">
-                  Sign in to access protected tools.
+                <ListItem to="/authV2" title="AuthV2">
+                  New and improved access to login or create an account.
                 </ListItem>
               )}
             </ul>

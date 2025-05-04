@@ -17,6 +17,7 @@ import RandomNumberPage from "@/pages/dashboard/RandomNumberPage";
 import AdminPage from "@/pages/dashboard/AdminPage";
 import NotFoundPage from "@/pages/public/NotFoundPage";
 import { ProtectedRoute } from "./ProtectedRoute";
+import AuthV2Page from "@/pages/auth/AuthV2Page";
 
 export const routes: RouteObject[] = [
   {
@@ -25,6 +26,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <HomePage /> },
       { path: "login", element: <LoginPage /> },
+      { path: "authV2", element: <AuthV2Page /> },
       { path: "register", element: <RegisterPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
