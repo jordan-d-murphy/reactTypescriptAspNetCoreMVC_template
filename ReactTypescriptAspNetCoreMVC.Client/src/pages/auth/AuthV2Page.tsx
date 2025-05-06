@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/auth/useAuth";
 import api from "@/api/axiosInstance";
@@ -6,25 +6,35 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import bonsaiImage from "@/assets/bonsai.webp";
 
 interface RegisterForm {
   username: string;
   password: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  displayName: string;
-  colorRole: string;
+}
+
+enum AuthAction {
+  Login = "login",
+  Register = "register",
 }
 
 export default function AuthV2({ className, ...props }: React.ComponentProps<"div">) {
+  const [tab, setTab] = useState<AuthAction>(AuthAction.Login);
+  const [loginMessage, setLoginMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (loginMessage) {
+      const timeout = setTimeout(() => setLoginMessage(null), 8000);
+      return () => clearTimeout(timeout);
+    }
+  }, [loginMessage]);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className={cn("flex flex-col gap-6 p-10", className)} {...props}>
-        <Tabs defaultValue="login" className="w-[400px]">
+        <Tabs value={tab} onValueChange={(val) => setTab(val as AuthAction)} className="w-[400px]">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login">Login</TabsTrigger>
             <TabsTrigger value="register">Register</TabsTrigger>
@@ -33,10 +43,10 @@ export default function AuthV2({ className, ...props }: React.ComponentProps<"di
             <Card>
               <CardHeader>
                 <CardTitle>Login</CardTitle>
-                <CardDescription>Please enter your credentials.</CardDescription>
+                <CardDescription>{loginMessage ?? "Please enter your credentials."}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-                <form>
+                <form id="login-form">
                   <div className="grid gap-6">
                     <div className="flex flex-col gap-4">
                       <Button variant="outline" className="w-full">
@@ -61,36 +71,16 @@ export default function AuthV2({ className, ...props }: React.ComponentProps<"di
                     <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                       <span className="relative z-10 bg-background px-2 text-muted-foreground">Or continue with</span>
                     </div>
-                    <div className="grid gap-6">
-                      <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" placeholder="m@example.com" required />
-                      </div>
-                      <div className="grid gap-2">
-                        <div className="flex items-center">
-                          <Label htmlFor="password">Password</Label>
-                          <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">
-                            Forgot your password?
-                          </a>
-                        </div>
-                        <Input id="password" type="password" required />
-                      </div>
-                      <Button type="submit" className="w-full">
-                        Login
-                      </Button>
-                    </div>
+                    <LoginV2Page />
                     <div className="text-center text-sm">
                       Don&apos;t have an account?{" "}
-                      <a href="#" className="underline underline-offset-4">
-                        Sign up
+                      <a onClick={() => setTab(AuthAction.Register)} className="underline underline-offset-4">
+                        Register
                       </a>
                     </div>
                   </div>
                 </form>
               </CardContent>
-              <CardFooter>
-                <Button>Save changes</Button>
-              </CardFooter>
             </Card>
           </TabsContent>
           <TabsContent value="register">
@@ -100,7 +90,7 @@ export default function AuthV2({ className, ...props }: React.ComponentProps<"di
                 <CardDescription>Create your account.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-                <form>
+                <form id="register-form" autoComplete="off">
                   <div className="grid gap-6">
                     <div className="flex flex-col gap-4">
                       <Button variant="outline" className="w-full">
@@ -110,7 +100,7 @@ export default function AuthV2({ className, ...props }: React.ComponentProps<"di
                             fill="currentColor"
                           />
                         </svg>
-                        Login with Apple
+                        Continue with Apple
                       </Button>
                       <Button variant="outline" className="w-full">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -119,42 +109,27 @@ export default function AuthV2({ className, ...props }: React.ComponentProps<"di
                             fill="currentColor"
                           />
                         </svg>
-                        Login with Google
+                        Continue with Google
                       </Button>
                     </div>
                     <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                       <span className="relative z-10 bg-background px-2 text-muted-foreground">Or continue with</span>
                     </div>
-                    <div className="grid gap-6">
-                      <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" placeholder="m@example.com" required />
-                      </div>
-                      <div className="grid gap-2">
-                        <div className="flex items-center">
-                          <Label htmlFor="password">Password</Label>
-                          <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">
-                            Forgot your password?
-                          </a>
-                        </div>
-                        <Input id="password" type="password" required />
-                      </div>
-                      <Button type="submit" className="w-full">
-                        Login
-                      </Button>
-                    </div>
+                    <RegisterV2Page
+                      onRegisterSuccess={() => {
+                        setLoginMessage("Account created successfully. Please log in.");
+                        setTab(AuthAction.Login);
+                      }}
+                    />{" "}
                     <div className="text-center text-sm">
-                      Don&apos;t have an account?{" "}
-                      <a href="#" className="underline underline-offset-4">
-                        Sign up
+                      Already have an account?{" "}
+                      <a onClick={() => setTab(AuthAction.Login)} className="underline underline-offset-4">
+                        Log In
                       </a>
                     </div>
                   </div>
                 </form>
               </CardContent>
-              <CardFooter>
-                <Button>Save password</Button>
-              </CardFooter>
             </Card>
           </TabsContent>
         </Tabs>
@@ -164,15 +139,15 @@ export default function AuthV2({ className, ...props }: React.ComponentProps<"di
 }
 
 export function LoginV2Page() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await api.post("/auth/login", { username, password });
+      const response = await api.post("/auth/login", { email: loginEmail, password: loginPassword });
 
       if (response.data?.token) {
         login(response.data.token);
@@ -186,52 +161,64 @@ export function LoginV2Page() {
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>Login</h2>
-      <input
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        style={{ display: "block", marginBottom: "1rem", marginLeft: "auto", marginRight: "auto" }}
-      />
-      <input
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ display: "block", marginBottom: "1rem", marginLeft: "auto", marginRight: "auto" }}
-      />
-      <button onClick={handleLogin}>Login</button>
+    <div className="grid gap-6">
+      <div className="grid gap-2">
+        <Label htmlFor="login-email">Email</Label>
+        <Input
+          id="login-email"
+          value={loginEmail}
+          onChange={(e) => setLoginEmail(e.target.value)}
+          placeholder="name@example.com"
+          required
+        />
+      </div>
+      <div className="grid gap-2">
+        <div className="flex items-center">
+          <Label htmlFor="login-password">Password</Label>
+          <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">
+            Forgot your password?
+          </a>
+        </div>
+        <Input
+          id="login-password"
+          value={loginPassword}
+          onChange={(e) => setLoginPassword(e.target.value)}
+          type="password"
+          required
+        />
+      </div>
+      <Button type="submit" onClick={handleLogin} className="w-full">
+        Login
+      </Button>
     </div>
   );
 }
 
-export function RegisterV2Page() {
-  const [form, setForm] = useState<RegisterForm>({
+export function RegisterV2Page({ onRegisterSuccess }: { onRegisterSuccess: () => void }) {
+  const [form, setRegisterForm] = useState<RegisterForm>({
     username: "",
     password: "",
     email: "",
-    firstName: "",
-    lastName: "",
-    displayName: "",
-    colorRole: "",
   });
 
+  const [registerEmail, setRegisterEmail] = useState("");
+  const [registerUsername, setRegisterUsername] = useState("");
+  const [registerPassword, setRegisterPassword] = useState("");
+
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     try {
-      const response = await api.post("/auth/register", form);
+      const response = await api.post("/auth/register", {
+        email: registerEmail,
+        username: registerUsername,
+        password: registerPassword,
+      });
       if (response.data.success) {
-        navigate("/login");
+        onRegisterSuccess();
       } else {
         setError("Registration failed.");
       }
@@ -241,116 +228,48 @@ export function RegisterV2Page() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", padding: "1rem" }}>
-      <h2>Register</h2>
-      <form autoComplete="off" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="firstName"
-          placeholder="First Name"
-          value={form.firstName}
-          onChange={handleChange}
-          required
-          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
-        />
-        <br />
-
-        <input
-          type="text"
-          name="lastName"
-          placeholder="Last Name"
-          value={form.lastName}
-          onChange={handleChange}
-          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
-        />
-        <br />
-
-        <input
-          type="text"
-          name="displayName"
-          placeholder="Display Name"
-          value={form.displayName}
-          onChange={handleChange}
-          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
-        />
-        <br />
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
-        />
-        <br />
-
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={form.username}
-          onChange={handleChange}
-          required
-          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
-          autoComplete="off"
-        />
-        <br />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-          style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
-          autoComplete="new-password"
-        />
-        <br />
-
-        <fieldset>
-          <legend>Choose a Color Role:</legend>
-          <div>
-            <input
-              type="radio"
-              name="colorRole"
-              id="radio-red"
-              value="Red"
-              defaultChecked={false}
-              onChange={handleChange}
-            />
-            <label htmlFor="radio-red">Red</label>
+    <>
+      <div className="grid gap-6">
+        <div className="grid gap-2">
+          <Label htmlFor="register-email">Email</Label>
+          <Input
+            id="register-email"
+            value={registerEmail}
+            onChange={(e) => setRegisterEmail(e.target.value)}
+            placeholder="name@example.com"
+            autoComplete="off"
+            required
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="register-username">Username</Label>
+          <Input
+            id="register-username"
+            value={registerUsername}
+            onChange={(e) => setRegisterUsername(e.target.value)}
+            placeholder="name123"
+            autoComplete="off"
+            required
+          />
+        </div>
+        <div className="grid gap-2">
+          <div className="flex items-center">
+            <Label htmlFor="register-password">Password</Label>
           </div>
-          <div>
-            <input
-              type="radio"
-              name="colorRole"
-              id="radio-green"
-              value="Green"
-              defaultChecked={false}
-              onChange={handleChange}
-            />
-            <label htmlFor="radio-green">Green</label>
-          </div>
-          <div>
-            <input
-              type="radio"
-              name="colorRole"
-              id="radio-blue"
-              value="Blue"
-              defaultChecked={false}
-              onChange={handleChange}
-            />
-            <label htmlFor="radio-blue">Blue</label>
-          </div>
-        </fieldset>
-
-        <button type="submit">Register</button>
-      </form>
-
+          <Input
+            id="register-password"
+            value={registerPassword}
+            onChange={(e) => setRegisterPassword(e.target.value)}
+            type="password"
+            autoComplete="new-password"
+            required
+          />
+        </div>
+        <Button type="submit" onClick={handleRegister} className="w-full">
+          Register
+        </Button>
+      </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
+    </>
   );
 }

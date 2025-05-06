@@ -25,8 +25,8 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
-            if (string.IsNullOrWhiteSpace(dto.Username))
-                return BadRequest("Username is Required");
+            if (string.IsNullOrWhiteSpace(dto.Email))
+                return BadRequest("Email is Required");
 
             var user = new AppUser
             {
@@ -62,7 +62,7 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Username) ?? await _userManager.FindByEmailAsync(dto.Username);
+            var user = await _userManager.FindByNameAsync(dto.Email) ?? await _userManager.FindByEmailAsync(dto.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
                 return Unauthorized();
 

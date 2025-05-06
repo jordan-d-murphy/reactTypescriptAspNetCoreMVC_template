@@ -15,7 +15,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (!isAuthenticated) {
     console.log("User not authenticated, redirecting to login...");
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/authV2" replace />;
   }
 
   return <>{children}</>; // MUST stay as {children}, do not update to <Outlet />
