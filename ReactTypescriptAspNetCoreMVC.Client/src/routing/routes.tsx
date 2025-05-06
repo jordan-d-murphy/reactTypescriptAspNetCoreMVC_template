@@ -1,13 +1,8 @@
-// src/routes.tsx
 import { Outlet, RouteObject } from "react-router-dom";
 import DashboardLayout from "@/pages/layouts/DashboardLayout";
 import PublicLayout from "@/pages/layouts/PublicLayout";
-
-// Import your pages
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import { ProjectsPage } from "@/pages/dashboard/features/projects/ProjectsPage";
-import LoginPage from "@/pages/auth/LoginPage";
-import RegisterPage from "@/pages/auth/RegisterPage";
 import HomePage from "@/pages/public/Home";
 import ProfilePage from "@/pages/dashboard/ProfilePage";
 import NotificationsPage from "@/pages/dashboard/NotificationsPage";
@@ -25,9 +20,7 @@ export const routes: RouteObject[] = [
     element: <PublicLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "login", element: <LoginPage /> },
       { path: "authV2", element: <AuthV2Page /> },
-      { path: "register", element: <RegisterPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

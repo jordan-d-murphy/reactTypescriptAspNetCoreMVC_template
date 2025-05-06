@@ -3,7 +3,6 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-// import { Icons } from "@/components/icons";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,13 +10,14 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  //   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
 import { Link } from "react-router-dom";
 import type { ComponentRef } from "react";
 
 import { useAuth } from "@/auth/useAuth";
+import { AuthAction } from "@/pages/auth/types";
+import { navigate } from "@/routing/router";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -54,6 +54,11 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
+const toAuthAction = (action: AuthAction) => {
+  window.dispatchEvent(new CustomEvent("authTabChange", { detail: action }));
+  navigate("/authV2"); // doesn't force reload
+};
+
 export function PublicNav() {
   const { isAuthenticated, user } = useAuth();
   return (
@@ -79,10 +84,20 @@ export function PublicNav() {
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem to="/login" title="Login (old)">
+              <ListItem
+                to="/authV2"
+                title="Login (new)"
+                onClick={() => toAuthAction(AuthAction.Login)}
+                state={{ tab: AuthAction.Login }}
+              >
                 Re-usable components built using Radix UI and Tailwind CSS.
               </ListItem>
-              <ListItem to="/register" title="Register (old)">
+              <ListItem
+                to="/authV2"
+                title="Register (new)"
+                onClick={() => toAuthAction(AuthAction.Register)}
+                state={{ tab: AuthAction.Register }}
+              >
                 How to install dependencies and structure your app.
               </ListItem>
               {isAuthenticated ? (

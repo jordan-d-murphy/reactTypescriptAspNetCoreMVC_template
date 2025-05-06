@@ -14,7 +14,7 @@ export default function NotFoundPage() {
           ? "This page doesn’t exist in your dashboard."
           : "Looks like this page doesn’t exist. Maybe try logging in?"}
       </p>
-      <Link to={isAuthenticated ? "/app" : "/login"}>
+      <Link to={isAuthenticated ? "/app" : "/authV2"}>
         <Button className="mt-6">{isAuthenticated ? "Go to Dashboard" : "Go to Login"}</Button>
       </Link>
     </div>

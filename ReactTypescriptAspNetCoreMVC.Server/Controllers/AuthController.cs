@@ -71,7 +71,6 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
 
             var refreshToken = _tokenService.CreateRefreshToken();
 
-            // _tokenService.SaveRefreshToken(user.Id, refreshToken);
             await _tokenService.SaveRefreshTokenAsync(user, refreshToken);
 
             var cookieOptions = new CookieOptions
