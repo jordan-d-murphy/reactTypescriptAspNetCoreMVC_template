@@ -139,7 +139,7 @@ export default function AuthV2({ className, ...props }: React.ComponentProps<"di
 }
 
 export function LoginV2Page() {
-  const [loginEmail, setLoginEmail] = useState("");
+  const [loginIdentifier, setLoginIdentifier] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -147,7 +147,7 @@ export function LoginV2Page() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await api.post("/auth/login", { email: loginEmail, password: loginPassword });
+      const response = await api.post("/auth/login", { loginIdentifier: loginIdentifier, password: loginPassword });
 
       if (response.data?.token) {
         login(response.data.token);
@@ -163,12 +163,22 @@ export function LoginV2Page() {
   return (
     <div className="grid gap-6">
       <div className="grid gap-2">
-        <Label htmlFor="login-email">Email</Label>
+        {/* <Label htmlFor="login-email">Email</Label>
         <Input
           id="login-email"
           value={loginEmail}
           onChange={(e) => setLoginEmail(e.target.value)}
           placeholder="name@example.com"
+          required
+        /> */}
+        <Label htmlFor="login-identifier">Email or Username</Label>
+        <Input
+          id="login-identifier"
+          name="identifier"
+          value={loginIdentifier}
+          onChange={(e) => setLoginIdentifier(e.target.value)}
+          placeholder="you@example.com or yourusername"
+          autoComplete="username"
           required
         />
       </div>

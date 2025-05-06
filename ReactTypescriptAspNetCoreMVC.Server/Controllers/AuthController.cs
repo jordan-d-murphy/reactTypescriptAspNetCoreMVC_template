@@ -62,7 +62,7 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Email) ?? await _userManager.FindByEmailAsync(dto.Email);
+            var user = await _userManager.FindByNameAsync(dto.LoginIdentifier) ?? await _userManager.FindByEmailAsync(dto.LoginIdentifier);
             if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
                 return Unauthorized();
 
