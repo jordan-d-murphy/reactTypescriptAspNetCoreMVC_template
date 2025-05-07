@@ -31,6 +31,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { ModeToggle } from "./mode-toggle";
+import { useAuth } from "@/auth/useAuth";
 
 const data = {
   user: {
@@ -41,28 +42,39 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/app",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
+      title: "Random Number",
+      url: "/app/random",
       icon: IconListDetails,
     },
     {
-      title: "Analytics",
-      url: "#",
+      title: "Timestamp",
+      url: "/app/timestamp",
+      icon: IconListDetails,
+    },
+    {
+      title: "UUID",
+      url: "/app/uuid",
+      icon: IconListDetails,
+    },
+    {
+      title: "Profile",
+      url: "/app/profile",
       icon: IconChartBar,
     },
     {
-      title: "Projects",
-      url: "#",
+      title: "Notifications",
+      url: "/app/notifications",
       icon: IconFolder,
     },
     {
-      title: "Team",
-      url: "#",
+      title: "Admin",
+      url: "/app/admin",
       icon: IconUsers,
+      requiresAdmin: true,
     },
   ],
   navClouds: [
@@ -173,7 +185,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <ModeToggle />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser testUser={data.user} />
       </SidebarFooter>
     </Sidebar>
   );
