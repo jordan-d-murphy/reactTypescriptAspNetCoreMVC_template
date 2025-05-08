@@ -31,7 +31,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { ModeToggle } from "./mode-toggle";
-import { useAuth } from "@/auth/useAuth";
 
 const data = {
   user: {

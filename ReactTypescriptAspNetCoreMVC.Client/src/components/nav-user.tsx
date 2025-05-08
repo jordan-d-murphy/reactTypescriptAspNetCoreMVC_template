@@ -24,7 +24,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const { isAuthenticated, logout, user, roles } = useAuth();
+  const { logout, user } = useAuth();
   // const { logout } = useAuth();
   const navigate = useNavigate();
   const handleLogout = () => {

@@ -1,4 +1,4 @@
-import { Outlet, RouteObject } from "react-router-dom";
+import { RouteObject } from "react-router-dom";
 import DashboardLayout from "@/pages/layouts/DashboardLayout";
 import PublicLayout from "@/pages/layouts/PublicLayout";
 import DashboardPage from "@/pages/dashboard/DashboardPage";

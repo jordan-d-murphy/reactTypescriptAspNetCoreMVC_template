@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using ReactTypescriptAspNetCoreMVC.Server.DTOs.Auth;
 using ReactTypescriptAspNetCoreMVC.Server.Entities;
 using ReactTypescriptAspNetCoreMVC.Server.Events;
+using ReactTypescriptAspNetCoreMVC.Server.Hubs;
 using ReactTypescriptAspNetCoreMVC.Server.Interfaces;
 
 namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
@@ -15,10 +17,13 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
 
-        public AuthController(UserManager<AppUser> userManager, ITokenService tokenService)
+        private readonly IHubContext<NotificationHub> _hub;
+
+        public AuthController(UserManager<AppUser> userManager, ITokenService tokenService, IHubContext<NotificationHub> hub)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _hub = hub;
         }
 
         [AllowAnonymous]
@@ -113,22 +118,14 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
 
         [HttpPost("refresh")]
         [AllowAnonymous]
-        public async Task<IActionResult> Refresh([FromBody] RefreshRequest refreshRequest)
+        public async Task<IActionResult> Refresh()
         {
             if (!Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
-            {
                 return Unauthorized();
-            }
 
-            var userId = refreshRequest.UserId;
-
-            // simple version assuming userId is known:
-            var user = await _userManager.FindByIdAsync(userId);
-
+            var user = await _tokenService.GetUserFromRefreshTokenAsync(refreshToken);
             if (user == null || !await _tokenService.ValidateRefreshTokenAsync(user, refreshToken))
-            {
                 return Unauthorized();
-            }
 
             await _tokenService.RevokeRefreshTokenAsync(user.Id, refreshToken);
 
@@ -138,17 +135,63 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
 
             await _tokenService.SaveRefreshTokenAsync(user, newRefreshToken);
 
-            var cookieOptions = new CookieOptions
+            Response.Cookies.Append("refreshToken", newRefreshToken, new CookieOptions
             {
                 HttpOnly = true,
                 SameSite = SameSiteMode.Lax,
                 Secure = true,
                 Expires = DateTime.UtcNow.AddDays(7)
-            };
+            });
 
-            Response.Cookies.Append("refreshToken", newRefreshToken, cookieOptions);
-
+            await _hub.Clients.User(user.Id).SendAsync("ReceiveNotification", "✅ Token refreshed successfully");
             return Ok(new { accessToken = newAccessToken });
         }
+
+        // [HttpPost("refresh")]
+        // [AllowAnonymous]
+        // [Consumes("application/json")]
+        // public async Task<IActionResult> Refresh([FromBody] RefreshRequest refreshRequest)
+        // {
+        //     var refreshTokenTest = Request.Cookies["refreshToken"];
+
+        //     Console.ForegroundColor = ConsoleColor.Yellow;
+        //     Console.WriteLine($"\n\nvar refreshTokenTest = Request.Cookies['refreshToken'];\n{refreshTokenTest}\n\n");
+        //     Console.ResetColor();
+
+        //     if (!Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
+        //     {
+        //         return Unauthorized();
+        //     }
+
+        //     var userId = refreshRequest.UserId;
+
+        //     // simple version assuming userId is known:
+        //     var user = await _userManager.FindByIdAsync(userId);
+
+        //     if (user == null || !await _tokenService.ValidateRefreshTokenAsync(user, refreshToken))
+        //     {
+        //         return Unauthorized();
+        //     }
+
+        //     await _tokenService.RevokeRefreshTokenAsync(user.Id, refreshToken);
+
+        //     var roles = await _userManager.GetRolesAsync(user);
+        //     var newAccessToken = _tokenService.CreateToken(user, roles);
+        //     var newRefreshToken = _tokenService.CreateRefreshToken();
+
+        //     await _tokenService.SaveRefreshTokenAsync(user, newRefreshToken);
+
+        //     var cookieOptions = new CookieOptions
+        //     {
+        //         HttpOnly = true,
+        //         SameSite = SameSiteMode.Lax,
+        //         Secure = true,
+        //         Expires = DateTime.UtcNow.AddDays(7)
+        //     };
+
+        //     Response.Cookies.Append("refreshToken", newRefreshToken, cookieOptions);
+
+        //     return Ok(new { accessToken = newAccessToken });
+        // }
     }
 }

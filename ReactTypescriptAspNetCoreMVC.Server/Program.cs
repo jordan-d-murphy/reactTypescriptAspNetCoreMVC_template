@@ -40,6 +40,7 @@ app.UseAuthorization();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseMiddleware<ValidationExceptionMiddleware>();
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.MapControllers();
 

@@ -8,8 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link, NavLink } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "@/auth/useAuth";
 
 export function NavMain({
@@ -22,8 +21,7 @@ export function NavMain({
     requiresAdmin?: boolean;
   }[];
 }) {
-  const { isAuthenticated, logout, user, roles } = useAuth();
-  const isAdmin = roles.includes("Admin");
+  const { roles } = useAuth();
 
   return (
     <SidebarGroup>
@@ -47,7 +45,7 @@ export function NavMain({
           {items
             .filter((item) => !item.requiresAdmin || roles.includes("Admin"))
             .map((item) => (
-              <NavLink to={item.url}>
+              <NavLink to={item.url} key={item.title}>
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton tooltip={item.title}>
                     {item.icon && <item.icon />}

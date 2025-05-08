@@ -47,6 +47,18 @@ function App() {
             console.warn("Received unknown notification payload:", notification);
           }
         });
+
+        // newConnection.on("RefreshToken", (notification) => {
+        //   console.log("📨 Toast message received:", notification);
+        //   toast.success(notification);
+        //   if (typeof notification === "string") {
+        //     toast.info(notification);
+        //   } else if (notification?.message) {
+        //     toast.info(notification.message);
+        //   } else {
+        //     console.warn("Received unknown notification payload:", notification);
+        //   }
+        // });
       } catch (error) {
         console.error("SignalR Connection Error: ", error);
       }
@@ -54,8 +66,13 @@ function App() {
 
     connect();
 
+    // return () => {
+    //   connection?.stop();
+    // };
     return () => {
-      connection?.stop();
+      connection?.stop().then(() => {
+        console.log("SignalR Disconnected.");
+      });
     };
   }, [token, isAuthenticated]);
 

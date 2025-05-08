@@ -14,6 +14,6 @@ export async function logoutUser() {
   } finally {
     removeToken();
     removeUser();
-    window.location.href = "/login";
+    window.location.href = "/authV2";
   }
 }

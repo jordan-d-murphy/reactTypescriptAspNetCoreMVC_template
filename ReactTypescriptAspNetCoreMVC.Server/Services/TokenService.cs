@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -18,11 +19,13 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Services
         // this is temporary, add to db later
         // private static readonly Dictionary<string, string> _refreshTokens = new Dictionary<string, string>();
         private readonly AuthDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
         private readonly JwtSettings _jwtSettings;
-        public TokenService(AuthDbContext context, IOptions<JwtSettings> options)
+        public TokenService(AuthDbContext context, UserManager<AppUser> userManager, IOptions<JwtSettings> options)
         {
             _context = context;
+            _userManager = userManager;
             _jwtSettings = options.Value;
         }
 
@@ -48,7 +51,7 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Services
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddSeconds(30), // Super short expiry for testing in dev!
+                expires: DateTime.UtcNow.AddSeconds(60), // Super short expiry for testing in dev!
 
                 // expires: DateTime.UtcNow.AddHours(1), // for actual use
 
@@ -108,6 +111,21 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Services
                 token.IsRevoked = true;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<AppUser> GetUserFromRefreshTokenAsync(string refreshToken)
+        {
+            if (string.IsNullOrWhiteSpace(refreshToken))
+                return null;
+
+            var storedToken = await _context.RefreshTokens
+                .Include(rt => rt.AppUser)
+                .FirstOrDefaultAsync(rt =>
+                    rt.Token == refreshToken &&
+                    rt.Expires > DateTime.UtcNow &&
+                    rt.IsRevoked == false);
+
+            return storedToken?.AppUser;
         }
 
         // public void SaveRefreshTokenAsync(string userId, string refreshToken)

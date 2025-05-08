@@ -58,8 +58,9 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const userId = getUserId(); // already have decoded user object on client
-        const refreshResponse = await api.post("/auth/refresh", { userId });
+        // const userId = getUserId(); // already have decoded user object on client
+        // const refreshResponse = await api.post("/auth/refresh", { userId });
+        const refreshResponse = await api.post("/auth/refresh");
 
         const newAccessToken = refreshResponse.data.accessToken;
         setToken(newAccessToken);

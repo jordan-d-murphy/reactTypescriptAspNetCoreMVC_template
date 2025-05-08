@@ -17,5 +17,6 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Interfaces
         Task<bool> ValidateRefreshTokenAsync(AppUser user, string refreshToken);
 
         Task RevokeRefreshTokenAsync(string userId, string refreshToken);
+        Task<AppUser> GetUserFromRefreshTokenAsync(string refreshToken);
     }
 }
