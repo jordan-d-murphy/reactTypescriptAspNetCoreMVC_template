@@ -16,6 +16,17 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Data.Auth
         public DbSet<Project> Projects => Set<Project>();
 
         public DbSet<TaskItem> TaskItems => Set<TaskItem>();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Project>()
+                .HasOne(p => p.Author)
+                .WithMany(u => u.Projects) // <-- or .WithMany() if no reverse nav
+                .HasForeignKey(p => p.OwnerId)
+                .OnDelete(DeleteBehavior.Restrict); // optional: prevent cascade delete
+        }
     }
 }
 

@@ -29,6 +29,7 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Controllers
 
             var project = await _context.Projects
                 .Include(p => p.Tasks)
+                .Include(p => p.Author)
                 .FirstOrDefaultAsync(p =>
                     p.Id == projectId &&
                     (p.OwnerId == userId || (p.SharedWithRole != null && roles.Contains(p.SharedWithRole))));

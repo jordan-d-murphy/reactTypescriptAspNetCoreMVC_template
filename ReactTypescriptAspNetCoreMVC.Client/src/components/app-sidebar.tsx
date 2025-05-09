@@ -60,6 +60,11 @@ const data = {
       icon: IconListDetails,
     },
     {
+      title: "Projects",
+      url: "/app/projects",
+      icon: IconListDetails,
+    },
+    {
       title: "Profile",
       url: "/app/profile",
       icon: IconChartBar,

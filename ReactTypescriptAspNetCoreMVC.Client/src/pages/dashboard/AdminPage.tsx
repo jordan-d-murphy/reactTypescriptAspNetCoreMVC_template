@@ -3,19 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
 import api from "../../api/axiosInstance";
 import Modal from "../../components/Modal";
+import { AppUser } from "./features/projects/types";
 
 interface NotifyAllForm {
   message: string;
 }
 
-type AppUser = {
-  firstName: string | null;
-  lastName: string | null;
-  displayName: string | null;
-  userName: string | null;
-  fullName: string | null;
-  isAdmin: boolean;
-};
+// type AppUser = {
+//   firstName: string | null;
+//   lastName: string | null;
+//   displayName: string | null;
+//   userName: string | null;
+//   fullName: string | null;
+//   isAdmin: boolean;
+// };
 
 export default function AdminPage() {
   const { isAuthenticated, token, roles } = useAuth();
