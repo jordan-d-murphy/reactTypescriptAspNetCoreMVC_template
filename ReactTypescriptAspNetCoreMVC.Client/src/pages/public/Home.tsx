@@ -2,7 +2,9 @@ import { TypingText } from "@/components/TypingText";
 import bonsaiImage from "@/assets/bonsai.webp";
 // import bonsaiImage from "@/assets/bonsai.png";
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Terminal } from "lucide-react";
+import { CommandPalette } from "@/components/CommandPalette";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 // export default function HomePage() {
 //   const [isPageLoading, setIsPageLoading] = useState(true);
@@ -79,20 +81,22 @@ export default function HomePage() {
           <h1 className="text-5xl sm:text-6xl font-bold leading-tight mt-2">
             with <em>bonsai</em>
           </h1>
-          <h2 className="text-xl sm:text-2xl mt-4 text-muted-foreground">
+          <h2 className="text-xl sm:text-2xl mt-4 mb-4 text-muted-foreground">
             The <em>Right</em> Template for React with C#
           </h2>
+
+          <Alert className="w-full max-w-lg glow-sweep rounded-md">
+            <Terminal className="h-4 w-4" />
+            <AlertTitle>Meet ⌘J</AlertTitle>
+            <AlertDescription>Get started from anywhere in the app.</AlertDescription>
+          </Alert>
         </div>
 
-        {/* Image Block */}
-        {/* <div className="flex justify-center md:justify-end"> */}
-        <div className="flex justify-center md:justify-start md:pl-4">
-          <img
-            src={bonsaiImage}
-            alt="bonsai"
-            className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-md shadow-lg"
-          />
-        </div>
+        <img
+          src={bonsaiImage}
+          alt="bonsai"
+          className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-md shadow-lg"
+        />
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import NavigateSetter from "@/components/NavigateSetter";
 import AxiosErrorListener from "@/api/AxiosErrorListener";
 import { routes } from "@/routing/routes";
 import { Loader2 } from "lucide-react";
+import { CommandPalette } from "./components/CommandPalette";
 
 function RoutesWrapper() {
   const element = useRoutes(routes);
@@ -93,6 +94,7 @@ function App() {
       </Router>
 
       <ToastContainer />
+      <CommandPalette />
     </>
   );
 }
