@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHotkey } from "@/hooks/useHotKey";
+// import { useHotkey } from "@/hooks/useHotKey";
 import {
   CommandDialog,
   CommandEmpty,
@@ -11,6 +11,7 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { Calendar, Smile, Calculator, User, CreditCard, Settings } from "lucide-react";
+import { useHotkey } from "@/hooks/useHotkey";
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false);

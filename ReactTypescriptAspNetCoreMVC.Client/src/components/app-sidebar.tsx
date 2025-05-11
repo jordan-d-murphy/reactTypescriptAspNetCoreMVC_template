@@ -11,6 +11,7 @@ import {
   IconHelp,
   IconInnerShadowTop,
   IconListDetails,
+  IconLockBolt,
   IconReport,
   IconSearch,
   IconSettings,
@@ -63,6 +64,11 @@ const data = {
       title: "Projects",
       url: "/app/projects",
       icon: IconListDetails,
+    },
+    {
+      title: "Playground",
+      url: "/app/playground",
+      icon: IconLockBolt,
     },
     {
       title: "Profile",

@@ -13,6 +13,7 @@ import AdminPage from "@/pages/dashboard/AdminPage";
 import NotFoundPage from "@/pages/public/NotFoundPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import AuthV2Page from "@/pages/auth/AuthV2Page";
+import PlaygroundPage from "@/pages/dashboard/features/playground/page";
 
 export const routes: RouteObject[] = [
   {
@@ -40,6 +41,7 @@ export const routes: RouteObject[] = [
       { path: "timestamp", element: <TimestampPage /> },
       { path: "notifications", element: <NotificationsPage /> },
       { path: "profile", element: <ProfilePage /> },
+      { path: "playground", element: <PlaygroundPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },
