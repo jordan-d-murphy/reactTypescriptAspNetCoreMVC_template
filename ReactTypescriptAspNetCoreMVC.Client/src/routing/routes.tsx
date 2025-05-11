@@ -14,6 +14,8 @@ import NotFoundPage from "@/pages/public/NotFoundPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import AuthV2Page from "@/pages/auth/AuthV2Page";
 import PlaygroundPage from "@/pages/dashboard/features/playground/page";
+import { Mail } from "@/pages/dashboard/features/mail/components/mail";
+import MailPage from "@/pages/dashboard/features/mail/page";
 
 export const routes: RouteObject[] = [
   {
@@ -42,6 +44,7 @@ export const routes: RouteObject[] = [
       { path: "notifications", element: <NotificationsPage /> },
       { path: "profile", element: <ProfilePage /> },
       { path: "playground", element: <PlaygroundPage /> },
+      { path: "mail", element: <MailPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

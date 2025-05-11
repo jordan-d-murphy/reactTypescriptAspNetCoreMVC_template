@@ -71,6 +71,11 @@ const data = {
       icon: IconLockBolt,
     },
     {
+      title: "Mail",
+      url: "/app/mail",
+      icon: IconLockBolt,
+    },
+    {
       title: "Profile",
       url: "/app/profile",
       icon: IconChartBar,
