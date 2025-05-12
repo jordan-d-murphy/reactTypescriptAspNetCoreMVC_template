@@ -24,6 +24,7 @@ import SettingsAppearancePage from "@/pages/dashboard/features/forms/appearance/
 import SettingsAccountPage from "@/pages/dashboard/features/forms/account/page";
 import SettingsDisplayPage from "@/pages/dashboard/features/forms/display/page";
 import WorkflowTaskPage from "@/pages/dashboard/features/workflowTask/page";
+import CardsPage from "@/pages/dashboard/features/cards/page";
 
 export const routes: RouteObject[] = [
   {
@@ -94,6 +95,7 @@ export const routes: RouteObject[] = [
           </SettingsLayout>
         ),
       },
+      { path: "cards", element: <CardsPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

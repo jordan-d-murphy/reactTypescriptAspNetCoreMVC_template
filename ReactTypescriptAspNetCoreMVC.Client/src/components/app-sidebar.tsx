@@ -80,6 +80,11 @@ const data = {
       url: "/app/workflowtasks",
       icon: IconLockBolt,
     },
+    {
+      title: "Demo",
+      url: "/app/cards",
+      icon: IconLockBolt,
+    },
     // {
     //   title: "Settings",
     //   url: "/app/settings/forms",
