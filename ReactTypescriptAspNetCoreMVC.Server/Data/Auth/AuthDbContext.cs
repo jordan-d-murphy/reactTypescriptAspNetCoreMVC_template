@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ReactTypescriptAspNetCoreMVC.Server.Entities;
+using ReactTypescriptAspNetCoreMVC.Server.Setup;
+using static ReactTypescriptAspNetCoreMVC.Server.Setup.SeedDb;
 
 namespace ReactTypescriptAspNetCoreMVC.Server.Data.Auth
 {
@@ -16,6 +18,7 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Data.Auth
         public DbSet<Project> Projects => Set<Project>();
 
         public DbSet<TaskItem> TaskItems => Set<TaskItem>();
+        public DbSet<WorkflowTask> WorkflowTasks => Set<WorkflowTask>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +29,109 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Data.Auth
                 .WithMany(u => u.Projects) // <-- or .WithMany() if no reverse nav
                 .HasForeignKey(p => p.OwnerId)
                 .OnDelete(DeleteBehavior.Restrict); // optional: prevent cascade delete
+
+
+            modelBuilder.Entity<WorkflowTask>().HasData(
+                new WorkflowTask("4a8d6842-1a16-5427-ad31-31d382c3638f", "TASK-8782", "You can't compress the program without quantifying the open-source SSD pixel!", "in progress", "documentation", "medium"),
+new WorkflowTask("5cd3018a-3a64-5780-a2ec-d6b5e58988a1", "TASK-7878", "Try to calculate the EXE feed, maybe it will index the multi-byte pixel!", "backlog", "documentation", "medium"),
+new WorkflowTask("9d2dd898-10fa-54ea-9574-916968f57390", "TASK-7839", "We need to bypass the neural TCP card!", "todo", "bug", "high"),
+new WorkflowTask("42581d3a-604f-52f4-8015-c461cb54a2e7", "TASK-5562", "The SAS interface is down, bypass the open-source pixel so we can back up the PNG bandwidth!", "backlog", "feature", "medium"),
+new WorkflowTask("75daf1ed-03d8-50d4-9a52-6fcf0c242d13", "TASK-8686", "I'll parse the wireless SSL protocol, that should driver the API panel!", "canceled", "feature", "medium"),
+new WorkflowTask("ad6989b7-51ba-5aee-b5eb-18b98dafbeb8", "TASK-1280", "Use the digital TLS panel, then you can transmit the haptic system!", "done", "bug", "high"),
+new WorkflowTask("a1cd3ea5-a724-5713-9303-449c287eb134", "TASK-7262", "The UTF8 application is down, parse the neural bandwidth so we can back up the PNG firewall!", "done", "feature", "high"),
+new WorkflowTask("1a2718e8-7cb0-58e8-addc-d9114f3ffbac", "TASK-1138", "Generating the driver won't do anything, we need to quantify the 1080p SMTP bandwidth!", "in progress", "feature", "medium"),
+new WorkflowTask("f6752e2a-1b6d-558d-a238-2956e85a8517", "TASK-7184", "We need to program the back-end THX pixel!", "todo", "feature", "low"),
+new WorkflowTask("5b33e359-0938-56c0-813d-316108a6af62", "TASK-5160", "Calculating the bus won't do anything, we need to navigate the back-end JSON protocol!", "in progress", "documentation", "high"),
+new WorkflowTask("acb4ba12-bb6d-50d6-bf38-a0158056eba0", "TASK-5618", "Generating the driver won't do anything, we need to index the online SSL application!", "done", "documentation", "medium"),
+new WorkflowTask("4769c0d0-23e0-5a54-aa17-85caceeb0cdd", "TASK-6699", "I'll transmit the wireless JBOD capacitor, that should hard drive the SSD feed!", "backlog", "documentation", "medium"),
+new WorkflowTask("49373de7-bf56-5d78-822d-33074fb0c3e0", "TASK-2858", "We need to override the online UDP bus!", "backlog", "bug", "medium"),
+new WorkflowTask("d0798ffa-9610-5568-840a-fdf5c96a1d06", "TASK-9864", "I'll reboot the 1080p FTP panel, that should matrix the HEX hard drive!", "done", "bug", "high"),
+new WorkflowTask("61bc7042-d3b8-503c-a741-807da52fdfe5", "TASK-8404", "We need to generate the virtual HEX alarm!", "in progress", "bug", "low"),
+new WorkflowTask("c1114fa1-1faa-57f3-bbed-ce58585be1df", "TASK-5365", "Backing up the pixel won't do anything, we need to transmit the primary IB array!", "in progress", "documentation", "low"),
+new WorkflowTask("4f78f96e-38a4-5952-8f61-6ce0aca3d4cc", "TASK-1780", "The CSS feed is down, index the bluetooth transmitter so we can compress the CLI protocol!", "todo", "documentation", "high"),
+new WorkflowTask("3a728f4a-31d7-5fd2-89a3-3a0776fc9c8d", "TASK-6938", "Use the redundant SCSI application, then you can hack the optical alarm!", "todo", "documentation", "high"),
+new WorkflowTask("104c44d4-5c00-59d1-8657-1e3bff6cadbb", "TASK-9885", "We need to compress the auxiliary VGA driver!", "backlog", "bug", "high"),
+new WorkflowTask("23a9c8c9-fed9-5fab-ad82-384204e35635", "TASK-3216", "Transmitting the transmitter won't do anything, we need to compress the virtual HDD sensor!", "backlog", "documentation", "medium"),
+new WorkflowTask("1d1b4be9-29bd-5405-90ec-95f6f9f1193e", "TASK-9285", "The IP monitor is down, copy the haptic alarm so we can generate the HTTP transmitter!", "todo", "bug", "high"),
+new WorkflowTask("bf976d57-7e46-595d-82ff-002408078e64", "TASK-1024", "Overriding the microchip won't do anything, we need to transmit the digital OCR transmitter!", "in progress", "documentation", "low"),
+new WorkflowTask("fcd629f5-5580-57a2-8cd0-cea1486be45e", "TASK-7068", "You can't generate the capacitor without indexing the wireless HEX pixel!", "canceled", "bug", "low"),
+new WorkflowTask("fd87f922-fca9-5fa2-9cf9-fab4c91bdfec", "TASK-6502", "Navigating the microchip won't do anything, we need to bypass the back-end SQL bus!", "todo", "bug", "high"),
+new WorkflowTask("00948df2-2182-5162-bd78-0548b7b8d1eb", "TASK-5326", "We need to hack the redundant UTF8 transmitter!", "todo", "bug", "low"),
+new WorkflowTask("df6885c8-eb53-5124-b751-591d1b605935", "TASK-6274", "Use the virtual PCI circuit, then you can parse the bluetooth alarm!", "canceled", "documentation", "low"),
+new WorkflowTask("8aadb738-e7cc-50d9-9c92-5f10fe1557dc", "TASK-1571", "I'll input the neural DRAM circuit, that should protocol the SMTP interface!", "in progress", "feature", "medium"),
+new WorkflowTask("f89498eb-19f8-5df7-bac5-8f66a4a60eab", "TASK-9518", "Compressing the interface won't do anything, we need to compress the online SDD matrix!", "canceled", "documentation", "medium"),
+new WorkflowTask("be10128d-6498-504d-b9b7-68fa3219e776", "TASK-5581", "I'll synthesize the digital COM pixel, that should transmitter the UTF8 protocol!", "backlog", "documentation", "high"),
+new WorkflowTask("e71a113d-61d0-5a43-9bba-a904cf2c4c59", "TASK-2197", "Parsing the feed won't do anything, we need to copy the bluetooth DRAM bus!", "todo", "documentation", "low"),
+new WorkflowTask("07dc3cbb-7e73-51b8-9733-acfc1be7fda7", "TASK-8484", "We need to parse the solid state UDP firewall!", "in progress", "bug", "low"),
+new WorkflowTask("8b2ef2e6-d6f7-55df-bd2a-8baa8d009024", "TASK-9892", "If we back up the application, we can get to the UDP application through the multi-byte THX capacitor!", "done", "documentation", "high"),
+new WorkflowTask("f13dec66-0d75-5c47-b1a2-4ad8f90f1b2d", "TASK-9616", "We need to synthesize the cross-platform ASCII pixel!", "in progress", "feature", "medium"),
+new WorkflowTask("30841630-ac1d-5467-ae26-ed44107829b0", "TASK-9744", "Use the back-end IP card, then you can input the solid state hard drive!", "done", "documentation", "low"),
+new WorkflowTask("ec2e9938-44cc-569e-b68e-83ebb9ac31ef", "TASK-1376", "Generating the alarm won't do anything, we need to generate the mobile IP capacitor!", "backlog", "documentation", "low"),
+new WorkflowTask("47295cac-2a88-569d-8b7e-59a801f5061a", "TASK-7382", "If we back up the firewall, we can get to the RAM alarm through the primary UTF8 pixel!", "todo", "feature", "low"),
+new WorkflowTask("2c202fc1-2f03-5e3f-b96e-f4954020fdcd", "TASK-2290", "I'll compress the virtual JSON panel, that should application the UTF8 bus!", "canceled", "documentation", "high"),
+new WorkflowTask("5ca1a574-446b-5de8-9a73-c0678d49eef2", "TASK-1533", "You can't input the firewall without overriding the wireless TCP firewall!", "done", "bug", "high"),
+new WorkflowTask("dc59532d-a613-56e0-b03b-607911631765", "TASK-4920", "Bypassing the hard drive won't do anything, we need to input the bluetooth JSON program!", "in progress", "bug", "high"),
+new WorkflowTask("566306ea-b79e-54dc-935c-6547db65dbde", "TASK-5168", "If we synthesize the bus, we can get to the IP panel through the virtual TLS array!", "in progress", "feature", "low"),
+new WorkflowTask("7b850ff7-f475-5490-9636-d7aad816925f", "TASK-7103", "We need to parse the multi-byte EXE bandwidth!", "canceled", "feature", "low"),
+new WorkflowTask("bf064ee5-bc53-5cf3-889a-b50c5738b4bd", "TASK-4314", "If we compress the program, we can get to the XML alarm through the multi-byte COM matrix!", "in progress", "bug", "high"),
+new WorkflowTask("2baf1cc4-7b26-55ff-925d-d4f6b65940c3", "TASK-3415", "Use the cross-platform XML application, then you can quantify the solid state feed!", "todo", "feature", "high"),
+new WorkflowTask("b7673f94-550d-526d-928c-ccd7776503cb", "TASK-8339", "Try to calculate the DNS interface, maybe it will input the bluetooth capacitor!", "in progress", "feature", "low"),
+new WorkflowTask("5e4b254c-13f3-55a0-84d3-9cf7c91fcead", "TASK-6995", "Try to hack the XSS bandwidth, maybe it will override the bluetooth matrix!", "todo", "feature", "high"),
+new WorkflowTask("91082321-6d7d-5c70-a240-74090f2cfca5", "TASK-8053", "If we connect the program, we can get to the UTF8 matrix through the digital UDP protocol!", "todo", "feature", "medium"),
+new WorkflowTask("76473521-c0c3-5f5f-b034-ce766552f5a6", "TASK-4336", "If we synthesize the microchip, we can get to the SAS sensor through the optical UDP program!", "todo", "documentation", "low"),
+new WorkflowTask("ec5f8ce2-201d-5a1c-b319-715b43d5bbb8", "TASK-8790", "I'll back up the optical COM alarm, that should alarm the RSS capacitor!", "done", "bug", "medium"),
+new WorkflowTask("f6d1aded-051c-5538-b4cf-61a664dd6a9b", "TASK-8980", "Try to navigate the SQL transmitter, maybe it will back up the virtual firewall!", "canceled", "bug", "low"),
+new WorkflowTask("0b354252-a4c6-593f-aee4-38d3f61fb7b8", "TASK-7342", "Use the neural CLI card, then you can parse the online port!", "backlog", "documentation", "low"),
+new WorkflowTask("6daa4e65-256b-54b5-a21b-28ce70aabd75", "TASK-5608", "I'll hack the haptic SSL program, that should bus the UDP transmitter!", "canceled", "documentation", "low"),
+new WorkflowTask("2763567b-a3e7-5147-9efc-49437c647b05", "TASK-1606", "I'll generate the bluetooth PNG firewall, that should pixel the SSL driver!", "done", "feature", "medium"),
+new WorkflowTask("829b1630-5298-5eed-b51c-9235c75ecaf3", "TASK-7872", "Transmitting the circuit won't do anything, we need to reboot the 1080p RSS monitor!", "canceled", "feature", "medium"),
+new WorkflowTask("e0497e9e-76dc-5f24-a3fb-1eb1cebbdddc", "TASK-4167", "Use the cross-platform SMS circuit, then you can synthesize the optical feed!", "canceled", "bug", "medium"),
+new WorkflowTask("5ae18e2b-41d6-51f9-922e-5667479ed8b0", "TASK-9581", "You can't index the port without hacking the cross-platform XSS monitor!", "backlog", "documentation", "low"),
+new WorkflowTask("815801a3-58c2-507e-83cc-c8470b408962", "TASK-8806", "We need to bypass the back-end SSL panel!", "done", "bug", "medium"),
+new WorkflowTask("a5d14e28-1d62-56f2-b115-d8e697957b7e", "TASK-6542", "Try to quantify the RSS firewall, maybe it will quantify the open-source system!", "done", "feature", "low"),
+new WorkflowTask("562256b8-7404-500d-bc27-d57b954cdc70", "TASK-6806", "The VGA protocol is down, reboot the back-end matrix so we can parse the CSS panel!", "canceled", "documentation", "low"),
+new WorkflowTask("2d2cd714-8357-58a6-b237-aeda80ce9d43", "TASK-9549", "You can't bypass the bus without connecting the neural JBOD bus!", "todo", "feature", "high"),
+new WorkflowTask("502d2943-25e2-5bc1-b8b7-d622770ddf9c", "TASK-1075", "Backing up the driver won't do anything, we need to parse the redundant RAM pixel!", "done", "feature", "medium"),
+new WorkflowTask("0d8cfccf-bf3b-5b62-9f19-9978c296985c", "TASK-1427", "Use the auxiliary PCI circuit, then you can calculate the cross-platform interface!", "done", "documentation", "high"),
+new WorkflowTask("d5bc4851-0801-5a98-b734-b4496a86c278", "TASK-1907", "Hacking the circuit won't do anything, we need to back up the online DRAM system!", "todo", "documentation", "high"),
+new WorkflowTask("31c68aa5-c614-5286-9810-87217a5dd7ea", "TASK-4309", "If we generate the system, we can get to the TCP sensor through the optical GB pixel!", "backlog", "bug", "medium"),
+new WorkflowTask("140d2c47-014a-535d-9798-d072af988997", "TASK-3973", "I'll parse the back-end ADP array, that should bandwidth the RSS bandwidth!", "todo", "feature", "medium"),
+new WorkflowTask("1bc4f637-2c4d-5958-8bea-169ee99234f7", "TASK-7962", "Use the wireless RAM program, then you can hack the cross-platform feed!", "canceled", "bug", "low"),
+new WorkflowTask("8b4b1ddc-fa25-5606-a312-0958acdb9387", "TASK-3360", "You can't quantify the program without synthesizing the neural OCR interface!", "done", "feature", "medium"),
+new WorkflowTask("28abec8a-5f0b-5386-b56c-de59c9424a3b", "TASK-9887", "Use the auxiliary ASCII sensor, then you can connect the solid state port!", "backlog", "bug", "medium"),
+new WorkflowTask("4ccb63de-a38e-5b1a-a693-f29fb9e500d6", "TASK-3649", "I'll input the virtual USB system, that should circuit the DNS monitor!", "in progress", "feature", "medium"),
+new WorkflowTask("a8af1089-f738-5c08-b5ba-9106a2f2bc33", "TASK-3586", "If we quantify the circuit, we can get to the CLI feed through the mobile SMS hard drive!", "in progress", "bug", "low"),
+new WorkflowTask("72cd2759-284a-5c67-a882-b3c286923e06", "TASK-5150", "I'll hack the wireless XSS port, that should transmitter the IP interface!", "canceled", "feature", "medium"),
+new WorkflowTask("fc66fa6c-bce8-5c91-94ae-7d6b709dacb8", "TASK-3652", "The SQL interface is down, override the optical bus so we can program the ASCII interface!", "backlog", "feature", "low"),
+new WorkflowTask("67731441-b46d-5875-8f8d-87bc139b264d", "TASK-6884", "Use the digital PCI circuit, then you can synthesize the multi-byte microchip!", "canceled", "feature", "high"),
+new WorkflowTask("024b3d09-2d43-53dd-92fa-ebb0ce5898c6", "TASK-1591", "We need to connect the mobile XSS driver!", "in progress", "feature", "high"),
+new WorkflowTask("08c68b1f-3262-5188-ac5e-f01c68b78af3", "TASK-3802", "Try to override the ASCII protocol, maybe it will parse the virtual matrix!", "in progress", "feature", "low"),
+new WorkflowTask("caff4b45-f9ef-5dd9-aeba-dbaf44ac9299", "TASK-7253", "Programming the capacitor won't do anything, we need to bypass the neural IB hard drive!", "backlog", "bug", "high"),
+new WorkflowTask("b5193ed9-d78a-59e8-a3e7-050d0b6b75dd", "TASK-9739", "We need to hack the multi-byte HDD bus!", "done", "documentation", "medium"),
+new WorkflowTask("4cf95fed-6952-5d3c-9f1b-bc3521418291", "TASK-4424", "Try to hack the HEX alarm, maybe it will connect the optical pixel!", "in progress", "documentation", "medium"),
+new WorkflowTask("0d93fde7-b79f-5967-a879-fa1f6d47c727", "TASK-3922", "You can't back up the capacitor without generating the wireless PCI program!", "backlog", "bug", "low"),
+new WorkflowTask("c79668fe-b6ea-57b7-92b4-3a826b6b2f0b", "TASK-4921", "I'll index the open-source IP feed, that should system the GB application!", "canceled", "bug", "low"),
+new WorkflowTask("2c83612b-333f-505e-8cd8-202e3a415ad4", "TASK-5814", "We need to calculate the 1080p AGP feed!", "backlog", "bug", "high"),
+new WorkflowTask("9191b107-a228-5870-b3d6-0bf9d464f2aa", "TASK-2645", "Synthesizing the system won't do anything, we need to navigate the multi-byte HDD firewall!", "todo", "documentation", "medium"),
+new WorkflowTask("9c28d6ff-2efc-5669-87fb-f7bab26e333d", "TASK-4535", "Try to copy the JSON circuit, maybe it will connect the wireless feed!", "in progress", "feature", "low"),
+new WorkflowTask("7bec632b-7ae3-5a6d-8c19-5665070f1d36", "TASK-4463", "We need to copy the solid state AGP monitor!", "done", "documentation", "low"),
+new WorkflowTask("1a6a55d5-59ab-54b6-9da0-3337cdf7b41f", "TASK-9745", "If we connect the protocol, we can get to the GB system through the bluetooth PCI microchip!", "canceled", "feature", "high"),
+new WorkflowTask("f357867c-18c9-5733-9104-6d1c3d6edece", "TASK-2080", "If we input the bus, we can get to the RAM matrix through the auxiliary RAM card!", "todo", "bug", "medium"),
+new WorkflowTask("49263223-395b-57d5-a4e3-f73f762d44db", "TASK-3838", "I'll bypass the online TCP application, that should panel the AGP system!", "backlog", "bug", "high"),
+new WorkflowTask("45697dba-832a-5ed9-914f-585bd27c4a38", "TASK-1340", "We need to navigate the virtual PNG circuit!", "todo", "bug", "medium"),
+new WorkflowTask("b0f7200f-aa2c-598b-b5f8-6f146ea0540d", "TASK-6665", "If we parse the monitor, we can get to the SSD hard drive through the cross-platform AGP alarm!", "canceled", "feature", "low"),
+new WorkflowTask("41d16e33-c807-50b3-a97f-a7dd870287a9", "TASK-7585", "If we calculate the hard drive, we can get to the SSL program through the multi-byte CSS microchip!", "backlog", "feature", "low"),
+new WorkflowTask("46c63687-83d1-52fb-a861-1e41f03e6672", "TASK-6319", "We need to copy the multi-byte SCSI program!", "backlog", "bug", "high"),
+new WorkflowTask("a89da4c1-ae70-5518-89bb-ab3e62e6ad3b", "TASK-4369", "Try to input the SCSI bus, maybe it will generate the 1080p pixel!", "backlog", "bug", "high"),
+new WorkflowTask("667b2eaa-30b5-5f28-935d-949d18b35af6", "TASK-9035", "We need to override the solid state PNG array!", "canceled", "documentation", "low"),
+new WorkflowTask("17dd433d-320a-505d-b06f-2d4dd21beca9", "TASK-3970", "You can't index the transmitter without quantifying the haptic ASCII card!", "todo", "documentation", "medium"),
+new WorkflowTask("db90eefd-b5a9-5e7b-84f8-e88614dcf265", "TASK-4473", "You can't bypass the protocol without overriding the neural RSS program!", "todo", "documentation", "low"),
+new WorkflowTask("0ae16007-aad, a-5b34-919f-8ae4056a9744", "TASK-4136", "You can't hack the hard drive without hacking the primary JSON program!", "canceled", "bug", "medium"),
+new WorkflowTask("f1bff6e9-0ea1-5504-82ae-66ef21cad485", "TASK-3939", "Use the back-end SQL firewall, then you can connect the neural hard drive!", "done", "feature", "low"),
+new WorkflowTask("373ee214-f937-5295-8107-8dfa0e8b3c94", "TASK-2007", "I'll input the back-end USB protocol, that should bandwidth the PCI system!", "backlog", "bug", "high"),
+new WorkflowTask("b4313fe1-569c-5068-9c79-5f5586ce1666", "TASK-7516", "Use the primary SQL program, then you can generate the auxiliary transmitter!", "done", "documentation", "medium"),
+new WorkflowTask("84c399f5-2aba-5c54-a3c1-305d52ba903b", "TASK-6906", "Try to back up the DRAM system, maybe it will reboot the online transmitter!", "done", "feature", "high"),
+new WorkflowTask("60fc2910-39e7-5fbe-bc22-b29cf7c7f8a9", "TASK-5207", "The SMS interface is down, copy the bluetooth bus so we can quantify the VGA card!", "in progress", "bug", "low"));
         }
     }
 }

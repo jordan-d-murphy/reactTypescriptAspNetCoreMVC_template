@@ -16,6 +16,14 @@ import AuthV2Page from "@/pages/auth/AuthV2Page";
 import PlaygroundPage from "@/pages/dashboard/features/playground/page";
 import { Mail } from "@/pages/dashboard/features/mail/components/mail";
 import MailPage from "@/pages/dashboard/features/mail/page";
+import TaskPage from "@/pages/dashboard/features/workflowTask/page";
+import SettingsLayout from "@/pages/dashboard/features/forms/layout";
+import SettingsProfilePage from "@/pages/dashboard/features/forms/page";
+import SettingsNotificationsPage from "@/pages/dashboard/features/forms/notifications/page";
+import SettingsAppearancePage from "@/pages/dashboard/features/forms/appearance/page";
+import SettingsAccountPage from "@/pages/dashboard/features/forms/account/page";
+import SettingsDisplayPage from "@/pages/dashboard/features/forms/display/page";
+import WorkflowTaskPage from "@/pages/dashboard/features/workflowTask/page";
 
 export const routes: RouteObject[] = [
   {
@@ -45,6 +53,47 @@ export const routes: RouteObject[] = [
       { path: "profile", element: <ProfilePage /> },
       { path: "playground", element: <PlaygroundPage /> },
       { path: "mail", element: <MailPage /> },
+      { path: "workflowtasks", element: <WorkflowTaskPage /> },
+      {
+        path: "settings/forms",
+        element: (
+          <SettingsLayout>
+            <SettingsProfilePage />
+          </SettingsLayout>
+        ),
+      },
+      {
+        path: "settings/forms/account",
+        element: (
+          <SettingsLayout>
+            <SettingsAccountPage />
+          </SettingsLayout>
+        ),
+      },
+      {
+        path: "settings/forms/appearance",
+        element: (
+          <SettingsLayout>
+            <SettingsAppearancePage />
+          </SettingsLayout>
+        ),
+      },
+      {
+        path: "settings/forms/notifications",
+        element: (
+          <SettingsLayout>
+            <SettingsNotificationsPage />
+          </SettingsLayout>
+        ),
+      },
+      {
+        path: "settings/forms/display",
+        element: (
+          <SettingsLayout>
+            <SettingsDisplayPage />
+          </SettingsLayout>
+        ),
+      },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

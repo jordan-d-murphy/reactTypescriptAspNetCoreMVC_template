@@ -76,15 +76,15 @@ const data = {
       icon: IconLockBolt,
     },
     {
-      title: "Profile",
-      url: "/app/profile",
-      icon: IconChartBar,
+      title: "Workflow Tasks",
+      url: "/app/workflowtasks",
+      icon: IconLockBolt,
     },
-    {
-      title: "Notifications",
-      url: "/app/notifications",
-      icon: IconFolder,
-    },
+    // {
+    //   title: "Settings",
+    //   url: "/app/settings/forms",
+    //   icon: IconChartBar,
+    // },
     {
       title: "Admin",
       url: "/app/admin",
@@ -143,7 +143,7 @@ const data = {
   navSecondary: [
     {
       title: "Settings",
-      url: "#",
+      url: "/app/settings/forms",
       icon: IconSettings,
     },
     {

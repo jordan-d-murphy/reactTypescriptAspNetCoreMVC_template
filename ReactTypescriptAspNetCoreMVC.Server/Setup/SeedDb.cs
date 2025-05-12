@@ -11,6 +11,12 @@ namespace ReactTypescriptAspNetCoreMVC.Server.Setup
             // this needs to move somewhere else, probably a role controller and be fetched from the database
             return ["Admin", "User", "PaidUser", "PremiumUser", "Red", "Green", "Blue"];
         }
+
+        public static string GetGUID()
+        {
+            return Guid.NewGuid().ToString();
+        }
+
         public static async Task SeedRolesAndAdminAsync(IServiceProvider services, IConfiguration config)
         {
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();

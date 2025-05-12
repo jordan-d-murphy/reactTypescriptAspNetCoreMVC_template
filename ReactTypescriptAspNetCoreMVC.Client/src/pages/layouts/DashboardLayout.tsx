@@ -19,15 +19,15 @@ export default function DashboardLayout() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <main>
-          {/* {isLoading ? (
+        {/* <main className="flex flex-1 flex-col"> */}
+        {/* {isLoading ? (
             <div className="flex h-screen items-center justify-center">
               <Loader2 className="h-10 w-10 animate-spin animate- text-muted-foreground" />
             </div>
           ) : ( */}
-          <Outlet />
-          {/* )} */}
-        </main>
+        <Outlet />
+        {/* )} */}
+        {/* </main> */}
       </SidebarInset>
     </SidebarProvider>
   );
