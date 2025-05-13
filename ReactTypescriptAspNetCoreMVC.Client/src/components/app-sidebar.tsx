@@ -85,6 +85,16 @@ const data = {
       url: "/app/cards",
       icon: IconLockBolt,
     },
+    {
+      title: "ProjectsV2",
+      url: "/app/projectsV2",
+      icon: IconLockBolt,
+    },
+    {
+      title: "Query Builder",
+      url: "/app/query/builder",
+      icon: IconLockBolt,
+    },
     // {
     //   title: "Settings",
     //   url: "/app/settings/forms",

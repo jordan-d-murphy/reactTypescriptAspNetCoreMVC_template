@@ -2,9 +2,7 @@
 
 import * as React from "react";
 import { Dialog } from "@radix-ui/react-dialog";
-import { MoreHorizontal } from "lucide-react";
 
-// import { toast } from "@/components/hooks/use-toast";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -16,16 +14,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-// import { Toaster } from "@/components/ui/sonner";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
@@ -46,39 +36,6 @@ export function PresetActions() {
 
   return (
     <>
-      {/* <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="secondary" size="icon">
-            <span className="sr-only">Actions</span>
-            <MoreHorizontal />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onSelect={(e) => {
-              e.preventDefault(); // Prevent the menu from closing too soon
-              setTimeout(() => setIsOpen(true), 10);
-              // setIsOpen(true);
-              // requestAnimationFrame(() => setIsOpen(true));
-            }}
-          >
-            Content filter preferences
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onSelect={(e) => {
-              e.preventDefault(); // Prevent the menu from closing too soon
-              setTimeout(() => setIsOpen(true), 10);
-              // setIsOpen(true);
-              // requestAnimationFrame(() => setIsOpen(true));
-            }}
-            className="text-red-600"
-          >
-            Delete preset
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu> */}
-
       <Button variant="secondary" onClick={() => setIsOpen(true)}>
         Content filter preferences
       </Button>

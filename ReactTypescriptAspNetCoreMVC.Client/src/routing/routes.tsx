@@ -14,9 +14,7 @@ import NotFoundPage from "@/pages/public/NotFoundPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import AuthV2Page from "@/pages/auth/AuthV2Page";
 import PlaygroundPage from "@/pages/dashboard/features/playground/page";
-import { Mail } from "@/pages/dashboard/features/mail/components/mail";
 import MailPage from "@/pages/dashboard/features/mail/page";
-import TaskPage from "@/pages/dashboard/features/workflowTask/page";
 import SettingsLayout from "@/pages/dashboard/features/forms/layout";
 import SettingsProfilePage from "@/pages/dashboard/features/forms/page";
 import SettingsNotificationsPage from "@/pages/dashboard/features/forms/notifications/page";
@@ -25,6 +23,8 @@ import SettingsAccountPage from "@/pages/dashboard/features/forms/account/page";
 import SettingsDisplayPage from "@/pages/dashboard/features/forms/display/page";
 import WorkflowTaskPage from "@/pages/dashboard/features/workflowTask/page";
 import CardsPage from "@/pages/dashboard/features/cards/page";
+import ProjectsV2Page from "@/pages/dashboard/features/projectsV2/page";
+import QueryBuilderPage from "@/pages/dashboard/features/query/page";
 
 export const routes: RouteObject[] = [
   {
@@ -55,6 +55,8 @@ export const routes: RouteObject[] = [
       { path: "playground", element: <PlaygroundPage /> },
       { path: "mail", element: <MailPage /> },
       { path: "workflowtasks", element: <WorkflowTaskPage /> },
+      { path: "projectsV2", element: <ProjectsV2Page /> },
+      { path: "query/builder", element: <QueryBuilderPage /> },
       {
         path: "settings/forms",
         element: (

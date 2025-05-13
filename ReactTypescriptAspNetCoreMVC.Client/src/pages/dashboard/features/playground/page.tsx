@@ -1,14 +1,10 @@
-// import { Metadata } from "next"
-// import Image from "next/image"
 import { RotateCcw } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-
 import { CodeViewer } from "./components/code-viewer";
 import { MaxLengthSelector } from "./components/maxlength-selector";
 import { ModelSelector } from "./components/model-selector";
@@ -21,31 +17,9 @@ import { TopPSelector } from "./components/top-p-selector";
 import { models, types } from "./data/models";
 import { presets } from "./data/presets";
 
-// export const metadata: Metadata = {
-//   title: "Playground",
-//   description: "The OpenAI Playground built using the components.",
-// }
-
 export default function PlaygroundPage() {
   return (
     <>
-      {/* <div className="md:hidden">
-        <Image
-          src="/examples/playground-light.png"
-          width={1280}
-          height={916}
-          alt="Playground"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/playground-dark.png"
-          width={1280}
-          height={916}
-          alt="Playground"
-          className="hidden dark:block"
-        />
-      </div> */}
-      {/* <div className="hidden h-full flex-col md:flex"> */}
       <div className="flex flex-1 flex-col">
         <div className="container p-6 flex flex-col items-start justify-between space-y-2 p-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
           <h2 className="text-lg font-semibold">Playground</h2>
