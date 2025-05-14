@@ -67,89 +67,229 @@ const ShadcnContextProvider = getCompatContextProvider({
   controlElements: shadcnUiControlElements,
   translations: shadcnUiTranslations,
 });
+// v works --- do not delete
+// v works --- do not delete
+// v works --- do not delete
+
+// const values = [
+//   { name: "option1", label: "Option 1" },
+//   { name: "option2", label: "Option 2" },
+//   { name: "option3", label: "Option 3" },
+//   { name: "option4", label: "Option 4" },
+// ];
+
+// const fields: Field[] = [
+//   { name: "text", label: "text", inputType: "text", value: "text" },
+//   {
+//     name: "select",
+//     label: "select",
+//     value: "select",
+//     valueEditorType: "select" as ValueEditorType,
+//     values,
+//   },
+//   {
+//     name: "checkbox",
+//     label: "checkbox",
+//     value: "checkbox",
+//     valueEditorType: "checkbox" as ValueEditorType,
+//   },
+//   {
+//     name: "radio",
+//     label: "radio",
+//     value: "radio",
+//     valueEditorType: "radio" as ValueEditorType,
+//     values,
+//   },
+//   {
+//     name: "textarea",
+//     label: "textarea",
+//     value: "textarea",
+//     valueEditorType: "textarea" as ValueEditorType,
+//   },
+//   {
+//     name: "multiselect",
+//     label: "multiselect",
+//     value: "multiselect",
+//     valueEditorType: "multiselect" as ValueEditorType,
+//     values,
+//   },
+//   { name: "date", label: "date", inputType: "date", value: "date" },
+//   {
+//     name: "datetime-local",
+//     label: "datetime-local",
+//     inputType: "datetime-local",
+//     value: "datetime-local",
+//   },
+//   { name: "time", label: "time", inputType: "time", value: "time" },
+//   {
+//     name: "field",
+//     label: "field",
+//     value: "field",
+//     valueSources: ["field", "value"],
+//   },
+// ];
+
+// export const operators = [
+//   { name: "=", label: "=" },
+//   { name: "in", label: "in" },
+//   { name: "between", label: "between" },
+// ];
+
+// export const defaultQuery: RuleGroupType = {
+//   combinator: "and",
+//   rules: [
+//     { field: "text", operator: "=", value: "" },
+//     { field: "select", operator: "=", value: "option2" },
+//     { field: "checkbox", operator: "=", value: true },
+//     { field: "switch", operator: "=", value: true },
+//     { field: "radio", operator: "=", value: "option2" },
+//     { field: "textarea", operator: "=", value: "" },
+//     { field: "multiselect", operator: "in", value: ["option1", "option2"] },
+//     { field: "date", operator: "=", value: "" },
+//     { field: "datetime-local", operator: "=", value: "" },
+//     { field: "time", operator: "=", value: "" },
+//     { field: "text", operator: "between", value: "A,Z" },
+//     { field: "select", operator: "between", value: "option2,option4" },
+//     { field: "field", operator: "=", value: "text", valueSource: "field" },
+//   ],
+// };
+
+// ^ works --- do not delete
+// ^ works --- do not delete
+// ^ works --- do not delete
+
+// v work in progress ---
+// v work in progress ---
+// v work in progress ---
 
 const values = [
-  { name: "option1", label: "Option 1" },
-  { name: "option2", label: "Option 2" },
-  { name: "option3", label: "Option 3" },
-  { name: "option4", label: "Option 4" },
+  { name: "Server", label: "Server" },
+  { name: "Serverless", label: "Serverless" },
+  { name: "Job", label: "Job" },
+  { name: "Pipeline", label: "Pipeline" },
+  { name: "API", label: "API" },
+  { name: "Staging", label: "Staging" },
+  { name: "Deploy", label: "Deploy" },
 ];
 
 const fields: Field[] = [
-  { name: "text", label: "text", inputType: "text", value: "text" },
+  // { name: "text", label: "text", inputType: "text", value: "text" },
+  // { name: "version", label: "version", inputType: "version", value: "version" },
   {
-    name: "select",
-    label: "select",
-    value: "select",
-    valueEditorType: "select" as ValueEditorType,
+    name: "version",
+    label: "version",
+    value: "version",
+    valueEditorType: "version" as ValueEditorType,
+    values,
+  },
+  // {
+  //   name: "select",
+  //   label: "select",
+  //   value: "select",
+  //   valueEditorType: "select" as ValueEditorType,
+  //   values,
+  // },
+  // {
+  //   name: "checkbox",
+  //   label: "checkbox",
+  //   value: "checkbox",
+  //   valueEditorType: "checkbox" as ValueEditorType,
+  // },
+  // {
+  //   name: "radio",
+  //   label: "radio",
+  //   value: "radio",
+  //   valueEditorType: "radio" as ValueEditorType,
+  //   values,
+  // },
+  // {
+  //   name: "textarea",
+  //   label: "textarea",
+  //   value: "textarea",
+  //   valueEditorType: "textarea" as ValueEditorType,
+  // },
+  {
+    name: "environment",
+    label: "environment",
+    value: "environment",
+    valueEditorType: "environment" as ValueEditorType,
     values,
   },
   {
-    name: "checkbox",
-    label: "checkbox",
-    value: "checkbox",
-    valueEditorType: "checkbox" as ValueEditorType,
-  },
-  {
-    name: "radio",
-    label: "radio",
-    value: "radio",
-    valueEditorType: "radio" as ValueEditorType,
+    name: "model",
+    label: "model",
+    value: "model",
+    valueEditorType: "model" as ValueEditorType,
     values,
   },
   {
-    name: "textarea",
-    label: "textarea",
-    value: "textarea",
-    valueEditorType: "textarea" as ValueEditorType,
-  },
-  {
-    name: "multiselect",
-    label: "multiselect",
-    value: "multiselect",
-    valueEditorType: "multiselect" as ValueEditorType,
+    name: "run",
+    label: "run",
+    value: "run",
+    valueEditorType: "run" as ValueEditorType,
     values,
   },
-  { name: "date", label: "date", inputType: "date", value: "date" },
   {
-    name: "datetime-local",
-    label: "datetime-local",
-    inputType: "datetime-local",
-    value: "datetime-local",
+    name: "path",
+    label: "path",
+    value: "path",
+    valueEditorType: "path" as ValueEditorType,
+    values,
   },
-  { name: "time", label: "time", inputType: "time", value: "time" },
-  {
-    name: "field",
-    label: "field",
-    value: "field",
-    valueSources: ["field", "value"],
-  },
+  // { name: "date", label: "date", inputType: "date", value: "date" },
+  // {
+  //   name: "datetime-local",
+  //   label: "datetime-local",
+  //   inputType: "datetime-local",
+  //   value: "datetime-local",
+  // },
+  // { name: "time", label: "time", inputType: "time", value: "time" },
+  // {
+  //   name: "field",
+  //   label: "field",
+  //   value: "field",
+  //   valueSources: ["field", "value"],
+  // },
 ];
 
 export const operators = [
   { name: "=", label: "=" },
   { name: "in", label: "in" },
-  { name: "between", label: "between" },
+  { name: "dynamic interface", label: "dynamic interface" },
 ];
 
 export const defaultQuery: RuleGroupType = {
   combinator: "and",
   rules: [
-    { field: "text", operator: "=", value: "" },
-    { field: "select", operator: "=", value: "option2" },
-    { field: "checkbox", operator: "=", value: true },
-    { field: "switch", operator: "=", value: true },
-    { field: "radio", operator: "=", value: "option2" },
-    { field: "textarea", operator: "=", value: "" },
-    { field: "multiselect", operator: "in", value: ["option1", "option2"] },
-    { field: "date", operator: "=", value: "" },
-    { field: "datetime-local", operator: "=", value: "" },
-    { field: "time", operator: "=", value: "" },
-    { field: "text", operator: "between", value: "A,Z" },
-    { field: "select", operator: "between", value: "option2,option4" },
-    { field: "field", operator: "=", value: "text", valueSource: "field" },
+    { field: "version", operator: "=", value: "3.1.4" },
+    // { field: "select", operator: "=", value: "option2" },
+    // { field: "checkbox", operator: "=", value: true },
+    // { field: "switch", operator: "=", value: true },
+    // { field: "radio", operator: "=", value: "option2" },
+    // { field: "textarea", operator: "=", value: "" },
+    { field: "environment", operator: "in", value: ["dev", "staging", "production", "chaos"] },
+    {
+      field: "model",
+      operator: "in",
+      value: ["GPT-4.5", "GPT-4o", "GPT-4o mini", "o3", "o4-mini", "o4-mini-high"],
+    },
+    {
+      field: "run",
+      operator: "in",
+      value: ["job", "pipeline", "script", "repl", "sandbox", "o4-mini-high", "deploy", "test", "build"],
+    },
+    { field: "path", operator: "=", value: "/path/to/artifact" },
+    // { field: "datetime-local", operator: "=", value: "" },
+    // { field: "time", operator: "=", value: "" },
+    // { field: "text", operator: "between", value: "A,Z" },
+    // { field: "select", operator: "between", value: "option2,option4" },
+    // { field: "field", operator: "=", value: "text", valueSource: "field" },
   ],
 };
+
+// ^ work in progress ---
+// ^ work in progress ---
+// ^ work in progress ---
 
 export const NullComponent = () => null;
 

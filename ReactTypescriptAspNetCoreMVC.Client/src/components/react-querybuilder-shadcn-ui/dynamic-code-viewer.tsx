@@ -8,6 +8,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+import { ShieldAlert, ShieldCheck, Files } from "lucide-react";
+import { toast } from "react-toastify";
+
 export enum DynamicCodeViewerType {
   save_export = "Save / Export",
   from_config = "Load From Config",
@@ -29,6 +32,19 @@ export function DynamicCodeViewer({ type, query }: { type: DynamicCodeViewerType
   const configJson = JSON.stringify(query, null, 2);
   console.log(configJson);
 
+  function handleCopy() {
+    navigator.clipboard.writeText(query);
+    toast.info("Copied to clipboard.");
+  }
+
+  function handleFix() {
+    toast.warn("Config could not be validated.");
+  }
+
+  function handleValid() {
+    toast.success("Config is valid.");
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -40,9 +56,58 @@ export function DynamicCodeViewer({ type, query }: { type: DynamicCodeViewerType
           <DialogDescription>{template.desc}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4">
-          <div className="rounded-md bg-black p-6 rounded-md bg-black p-6 max-h-[500px] overflow-auto">
+          {/* <div className="rounded-md bg-black p-6 rounded-md bg-black p-6 max-h-[500px] overflow-auto"> */}
+          <div className="rounded-md p-6 rounded-md p-6 max-h-[500px] overflow-auto">
+            {/* {type && type === DynamicCodeViewerType.from_config ? (
+              <button
+                className="absolute bottom-5 right-5 text-muted-foreground hover:text-white"
+                onClick={() => navigator.clipboard.writeText(query)}
+                title="Copy to clipboard"
+              >
+                <ShieldCheck className="text-red-500" />
+              </button>
+            ) : (
+              <button
+                className="absolute bottom-5 right-5 text-muted-foreground hover:text-white"
+                onClick={() => navigator.clipboard.writeText(query)}
+                title="Fix it"
+              >
+                <ShieldCheck className="text-green-500" />
+              </button>
+            )} */}
+
             <pre>
-              <code className="grid gap-1 text-sm text-muted-foreground [&_span]:h-4 text-sm text-muted-foreground whitespace-pre-wrap">
+              {/* <code className="grid gap-1 text-sm text-muted-foreground [&_span]:h-4 text-sm text-muted-foreground whitespace-pre-wrap"> */}
+              <code className="grid gap-1 text-sm text-muted-foreground whitespace-pre-wrap [&_span]:h-4">
+                {type && type === DynamicCodeViewerType.from_config ? (
+                  <>
+                    <button
+                      className="absolute top-25 right-10 text-muted-foreground hover:text-white"
+                      onClick={handleFix}
+                      title="Config could not be validated!"
+                    >
+                      <ShieldAlert className="text-red-500" />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className="absolute top-25 right-10 text-muted-foreground hover:text-white"
+                      onClick={handleValid}
+                      title="Config is valid."
+                    >
+                      <ShieldCheck className="text-green-500" />
+                    </button>
+                  </>
+                )}
+                <button
+                  className="absolute bottom-25 right-10 text-muted-foreground hover:text-white"
+                  onClick={handleCopy}
+                  title="Copy to clipboard"
+                >
+                  <Files className="text-gray-500" />
+                </button>
+
                 {query}
               </code>
             </pre>
